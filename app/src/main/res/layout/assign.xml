@@ -24,37 +24,75 @@
             android:textSize="15sp"
             android:onClick="updateDelivery"/>
     </LinearLayout>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="300dp"
         android:layout_height="125dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="@color/common_action_bar_splitter"
         android:clickable="true"
         android:onClick="TextView1"/>
-    <TextView
+        <CheckBox
+            android:id="@+id/CheckBox1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="300dp"
         android:layout_height="125dp"
         android:layout_centerHorizontal="true"
         android:background="@color/common_action_bar_splitter"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:clickable="true"
         android:onClick="TextView2"/>
-    <TextView
+        <CheckBox
+            android:id="@+id/CheckBox2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="300dp"
         android:layout_height="125dp"
         android:layout_centerHorizontal="true"
         android:background="@color/common_action_bar_splitter"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:clickable="true"
         android:onClick="TextView3"/>
+        <CheckBox
+            android:id="@+id/CheckBox3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"/>
+    </LinearLayout>
     <Button
         android:id="@+id/moreDeliveryVeiwButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
-        android:text="배송내역 더보기"
+        android:text="배송예약 내역 더보기"
         android:textSize="15sp"
         android:onClick="moreDeliveryVeiw"/>
     <LinearLayout
@@ -94,5 +132,4 @@
             android:onClick="setting"/>
 
     </LinearLayout>
-
 </LinearLayout>

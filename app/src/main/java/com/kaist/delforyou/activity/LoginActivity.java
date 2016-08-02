@@ -7,32 +7,28 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.util.Log;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.kaist.delforyou.MainActivity;
 import com.kaist.delforyou.R;
 import com.kaist.delforyou.app.AppConfig;
 import com.kaist.delforyou.app.AppController;
 import com.kaist.delforyou.helper.SQLiteHandler;
 import com.kaist.delforyou.helper.SessionManager;
-import com.kaist.delforyou.activity.MainMenuActivityforDeliveryMen;
-import com.kaist.delforyou.activity.SignupActivity;
-import com.kaist.delforyou.activity.UserData;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends Activity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -137,8 +133,8 @@ public class LoginActivity extends Activity {
                         String fname = user.getString("firstname");
                         String lname = user.getString("lastname");
                         String email = user.getString("email");
-                        String employeeid = user.getString("employeeid");
-
+//                        String employeeid = user.getString("employeeid");
+                        String employeeid = "0011";
                         // Inserting row in users table
                         db.addUser(fname, lname, email, employeeid);
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp">
+
+        <Button
+            android:id="@+id/sortButton"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:text="정렬"
+            android:textSize="15sp"
+            android:onClick="sort"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@color/common_action_bar_splitter"
+        android:clickable="true"
+        android:onClick="TextView1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/common_action_bar_splitter"
+        android:layout_marginTop="5dp"
+        android:clickable="true"
+        android:onClick="TextView2"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/common_action_bar_splitter"
+        android:layout_marginTop="5dp"
+        android:clickable="true"
+        android:onClick="TextView3"/>
+    <Button
+        android:id="@+id/moreDeliveryVeiwButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:text="배송내역 더보기"
+        android:textSize="15sp"
+        android:onClick="moreDeliveryVeiw"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp">
+        <Button
+            android:id="@+id/dliveryViewButton"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:text="배송조회"
+            android:textSize="15sp"
+            android:onClick="dliveryView"/>
+        <Button
+            android:id="@+id/reservationHistoryButton"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="2dp"
+            android:text="예약함"
+            android:textSize="15sp"
+            android:onClick="reservationHistory"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="송장번호 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="상품정보 :"
+        android:textSize="13sp"/>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="보내는 분 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="받는 분 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="방문 희망일 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="수령 희망일 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:text="상태정보"
+        android:textSize="20sp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="60dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="70dp">
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="1.물품수령"
+        android:textSize="13sp" />
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="2.배달 중"
+        android:textSize="13sp"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:text="3.배달완료"
+        android:textSize="13sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="처리일시"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:text="상품상태"
+            android:textSize="13sp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:background="@color/common_action_bar_splitter"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/common_action_bar_splitter"/>
+
+        <Button
+            android:id="@+id/deliveryMenViewButton1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:onClick="deliveryMenView"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:background="@color/common_action_bar_splitter"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/common_action_bar_splitter"/>
+
+        <Button
+            android:id="@+id/deliveryMenViewButton2"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:onClick="deliveryMenView"
+            android:layout_marginLeft="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:background="@color/common_action_bar_splitter"/>
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/common_action_bar_splitter"/>
+
+        <Button
+            android:id="@+id/deliveryMenViewButton3"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:onClick="deliveryMenView"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
+</LinearLayout>

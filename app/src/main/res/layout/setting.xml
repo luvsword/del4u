@@ -1,0 +1,25 @@
+<PreferenceScreen
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+<PreferenceCategory android:title="Setting">
+    <CheckBoxPreference
+        android:key="notice"
+        android:title="알림설정"
+        android:summary="배송정보 알림을 수신합니다."
+        android:persistent="true"
+        android:backgroundTint="#87CEEB"/>
+    <CheckBoxPreference
+        android:key="notice_sound"
+        android:title="소리알림"
+        android:summary="알림을 소리로 설정합니다."
+        android:persistent="true"
+        android:backgroundTint="#87CEEB"/>
+    <CheckBoxPreference
+        android:key="notice_vibration"
+        android:title="진동알림"
+        android:summary="알림을 진동으로 설정합니다."
+        android:persistent="true"
+        android:backgroundTint="#87CEEB"/>
+</PreferenceCategory>
+</PreferenceScreen>

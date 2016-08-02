@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="300dp"
+        android:background="@color/common_action_bar_splitter"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="250dp"
+            android:textSize="13sp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/common_action_bar_splitter"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
+            <Button
+                android:id="@+id/connectMessageButton"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:onClick="connectMessage"
+                android:textSize="13sp"
+                android:text="메세지 전송" />
+            <Button
+                android:id="@+id/connectCallButton"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:onClick="connectCall"
+                android:textSize="13sp"
+                android:text="전화 연결" />
+
+        </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

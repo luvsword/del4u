@@ -74,9 +74,11 @@ public class SignupActivity extends Activity {
     Spinner spinner_businessgroup;
     Spinner spinner_company;
     Spinner spinner_division;
+    Spinner spinner_building;
     HashMap<String, String> groups = new HashMap<>();
     HashMap<String, HashMap<String, String>> companies = new HashMap<>();
     HashMap<String, HashMap<String, String>> divisions = new HashMap<>();
+    HashMap<String, HashMap<String, String>> buildings = new HashMap<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -302,7 +304,7 @@ public class SignupActivity extends Activity {
 
     protected void fillDivisionSpinner(String companyID) {
         Log.i("HOHO", "companyID) " + companyID);
-        HashMap<String, String> divisionHashMap = divisions.get(companyID);
+        final HashMap<String, String> divisionHashMap = divisions.get(companyID);
         final ArrayList<String> divisionList = new ArrayList<>(divisionHashMap.values());
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, divisionList);
@@ -314,12 +316,29 @@ public class SignupActivity extends Activity {
                     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                         int position= spinner_division.getSelectedItemPosition();
                         Toast.makeText(getApplicationContext(), "You select " + divisionList.toArray()[+position],Toast.LENGTH_SHORT).show();
+                        fillBuildingSpinner(divisionHashMap.keySet().toArray()[+position].toString());
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> arg0) {
                     }
                 }
         );
+    }
+
+    protected void fillBuildingSpinner(String divisionID) {
+        Log.i("HOHO", "divisionID) " + divisionID);
+        Log.i("HOHO", "buildingHashMap) " + buildings.toString());
+        HashMap<String, String> buildingHashMap = buildings.get(divisionID);
+        if (buildingHashMap != null) {
+            final ArrayList<String> buildingList = new ArrayList<>(buildingHashMap.values());
+            ArrayAdapter<String> adapter =
+                    new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, buildingList);
+            spinner_building = (Spinner) findViewById(R.id.building);
+            spinner_building.setAdapter(adapter);
+        } else {
+            spinner_building.setAdapter(null);
+        }
+
     }
 
     private class PHP_GetCompnayInfo extends AsyncTask<String, Integer, String> {
@@ -386,6 +405,19 @@ public class SignupActivity extends Activity {
                         HashMap<String, String> list = new HashMap<>();
                         list.put(jo.getString("divisionid"), jo.getString("description"));
                         divisions.put(jo.getString("companyid"), list);
+                    }
+                }
+
+                JSONArray building = results.getJSONArray("building");
+                Log.i("HOHO", "buildings.. " + Integer.toString(building.length()));
+                for (int index=0; index<building.length(); index++){
+                    JSONObject jo = building.getJSONObject(index);
+                    if (buildings.containsKey(jo.getString("divisionid"))) {
+                        buildings.get(jo.getString("divisionid")).put(jo.getString("buildingid"),jo.getString("buildingname"));
+                    } else {
+                        HashMap<String, String> list = new HashMap<>();
+                        list.put(jo.getString("buildingid"), jo.getString("buildingname"));
+                        buildings.put(jo.getString("divisionid"), list);
                     }
                 }
 

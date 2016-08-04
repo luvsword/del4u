@@ -3,6 +3,7 @@ package com.kaist.delforyou.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +19,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.kaist.delforyou.R;
@@ -53,7 +62,7 @@ public class SignupActivity extends Activity {
 
     Spinner spinner;
 
-    String[] companies = {
+    String[] companies2 = {
             "LG Electronics",
             "Samsung Electronics",
             "LG Chem Ltd.",
@@ -61,27 +70,21 @@ public class SignupActivity extends Activity {
             "만도"
     };
 
+    PHP_GetCompnayInfo taskPHP;
+    Spinner spinner_businessgroup;
+    Spinner spinner_company;
+    Spinner spinner_division;
+    HashMap<String, String> groups = new HashMap<>();
+    HashMap<String, HashMap<String, String>> companies = new HashMap<>();
+    HashMap<String, HashMap<String, String>> divisions = new HashMap<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
 
-        spinner = (Spinner)findViewById(R.id.company);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, companies);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                        int position= spinner.getSelectedItemPosition();
-                        Toast.makeText(getApplicationContext(), "You select " + companies[+position],Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> arg0) {
-
-                    }
-                }
-        );
+        taskPHP = new PHP_GetCompnayInfo();
+        taskPHP.execute("http://125.131.73.146/company_info.php");
 
         inputFname = (EditText) findViewById(R.id.fname);
         inputLname = (EditText) findViewById(R.id.lname);
@@ -250,5 +253,146 @@ public class SignupActivity extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    protected void fillGroupList() {
+        final ArrayList<String> groupList = new ArrayList<>(groups.values());
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groupList);
+        spinner_businessgroup = (Spinner)findViewById(R.id.businessgroup);
+        spinner_businessgroup.setAdapter(adapter);
+        spinner_businessgroup.setOnItemSelectedListener(
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    int position= spinner_businessgroup.getSelectedItemPosition();
+                    Toast.makeText(getApplicationContext(), "You select " + groupList.toArray()[+position],Toast.LENGTH_SHORT).show();
+
+                    fillCompanySpinner(groups.keySet().toArray()[+position].toString());
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            }
+        );
+    }
+
+    protected void fillCompanySpinner(String groupID) {
+        Log.i("HOHO", "groupID.. " + groupID);
+        final HashMap<String, String> companyHashMap = companies.get(groupID);
+        final ArrayList<String> companyList = new ArrayList<>(companyHashMap.values());
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, companyList);
+        spinner_company = (Spinner)findViewById(R.id.company);
+        spinner_company.setAdapter(adapter);
+        spinner_company.setOnItemSelectedListener(
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    int position= spinner_company.getSelectedItemPosition();
+                    Toast.makeText(getApplicationContext(), "You select " + companyList.toArray()[+position],Toast.LENGTH_SHORT).show();
+                    fillDivisionSpinner(companyHashMap.keySet().toArray()[+position].toString());
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> arg0) {
+                }
+            }
+        );
+    }
+
+    protected void fillDivisionSpinner(String companyID) {
+        Log.i("HOHO", "companyID) " + companyID);
+        HashMap<String, String> divisionHashMap = divisions.get(companyID);
+        final ArrayList<String> divisionList = new ArrayList<>(divisionHashMap.values());
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, divisionList);
+        spinner_division = (Spinner)findViewById(R.id.division);
+        spinner_division.setAdapter(adapter);
+        spinner_division.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        int position= spinner_division.getSelectedItemPosition();
+                        Toast.makeText(getApplicationContext(), "You select " + divisionList.toArray()[+position],Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
+                }
+        );
+    }
+
+    private class PHP_GetCompnayInfo extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            StringBuilder jsonHtml = new StringBuilder();
+            try {
+                URL url = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                if (conn!=null){
+                    conn.setConnectTimeout(10000);
+                    conn.setUseCaches(false);
+                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                        for(;;) {
+                            String line = br.readLine();
+                            if (line == null) break;
+                            jsonHtml.append(line + "\n");
+                        }
+                        br.close();
+                    }
+                    conn.disconnect();
+                }
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return
+                jsonHtml.toString();
+        }
+        protected void onPostExecute(String str){
+            try {
+                JSONObject root = new JSONObject(str);
+                JSONObject results = root.getJSONObject("results");
+
+                JSONArray group = results.getJSONArray("group");
+                Log.i("HOHO", "groups.. " + Integer.toString(group.length()));
+                for(int index=0; index<group.length(); index++){
+                    JSONObject jo = group.getJSONObject(index);
+                    groups.put(jo.getString("groupid"), jo.getString("description"));
+                }
+
+                JSONArray company = results.getJSONArray("company");
+                Log.i("HOHO", "companies.. " + Integer.toString(company.length()));
+                for (int index=0; index<company.length(); index++){
+                    JSONObject jo = company.getJSONObject(index);
+                    if (companies.containsKey(jo.getString("groupid"))) {
+                        companies.get(jo.getString("groupid")).put(jo.getString("companyid"), jo.getString("description"));
+                    } else {
+                        HashMap<String, String> list = new HashMap<>();
+                        list.put(jo.getString("companyid"),jo.getString("description"));
+                        companies.put(jo.getString("groupid"), list);
+                    }
+                }
+
+                JSONArray division = results.getJSONArray("division");
+                Log.i("HOHO", "divisions.. " + Integer.toString(division.length()));
+                for (int index=0; index<division.length(); index++){
+                    JSONObject jo = division.getJSONObject(index);
+                    if (divisions.containsKey(jo.getString("companyid"))) {
+                        divisions.get(jo.getString("companyid")).put(jo.getString("divisionid"),jo.getString("description"));
+                    } else {
+                        HashMap<String, String> list = new HashMap<>();
+                        list.put(jo.getString("divisionid"), jo.getString("description"));
+                        divisions.put(jo.getString("companyid"), list);
+                    }
+                }
+
+                fillGroupList();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

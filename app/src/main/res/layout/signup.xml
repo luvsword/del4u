@@ -73,8 +73,23 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="회사 :"
-                android:textSize="13sp"/>
+                android:text="기업집단"/>
+            <Spinner
+                android:id="@+id/businessgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="회사"/>
             <Spinner
                 android:id="@+id/company"
                 android:layout_width="match_parent"
@@ -82,21 +97,51 @@
                 android:layout_gravity="center" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="30dp">
 
             <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:text="사업부서 :"
-                android:textSize="13sp"/>
-            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="사업부"/>
+            <Spinner
                 android:id="@+id/division"
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:hint =""
-                android:inputType="date"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="근무지"/>
+            <Spinner
+                android:id="@+id/building"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="근무지 상세"/>
+            <EditText
+                android:id="@+id/location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

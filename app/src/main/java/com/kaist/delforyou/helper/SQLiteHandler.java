@@ -28,8 +28,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_FNAME = "fname";
     private static final String KEY_LNAME = "lname";
     private static final String KEY_EMAIL = "email";
-//    private static final String KEY_UID = "uid";
-//    private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_PHONE = "phone";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,8 +38,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + KEY_EID + " INTEGER," + KEY_FNAME + " TEXT," + KEY_LNAME + " TEXT,"
-                + KEY_EMAIL + " TEXT PRIMARY KEY)";
+                + KEY_FNAME + " TEXT," + KEY_LNAME +" TEXT," + KEY_EMAIL + " TEXT PRIMARY KEY,"
+                + KEY_EID + " INTEGER, " + KEY_PHONE + " TEXT)";
         db.execSQL(CREATE_LOGIN_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -59,7 +58,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String fname, String lname, String email, String eid) {
+    public void addUser(String fname, String lname, String email, String eid, String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -67,6 +66,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_LNAME, lname);
         values.put(KEY_EMAIL, email);
         values.put(KEY_EID, eid);
+        values.put(KEY_PHONE, phone); // Email
 
         // Inserting Row
         long id = db.insert(TABLE_USER, null, values);
@@ -91,6 +91,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("lname", cursor.getString(1));
             user.put("email", cursor.getString(2));
             user.put("eid", cursor.getString(3));
+            user.put("phone", cursor.getString(4));
         }
         cursor.close();
         db.close();

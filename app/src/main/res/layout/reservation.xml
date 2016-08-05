@@ -27,10 +27,11 @@
                     android:layout_height="50dp"
                     android:text="이름 :"
                     android:textSize="13sp"/>
-                <EditText
+                <TextView
                     android:layout_width="200dp"
                     android:layout_height="50dp"
-                    android:hint="" />
+                    android:textSize="13sp"
+                    android:id ="@+id/user_name_text"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,11 +42,11 @@
                     android:layout_height="50dp"
                     android:text="전화번호 :"
                     android:textSize="13sp"/>
-                <EditText
+                <TextView
                     android:layout_width="200dp"
                     android:layout_height="50dp"
-                    android:inputType="phone"
-                    android:hint=""/>
+                    android:textSize="13sp"
+                    android:id ="@+id/user_phone_text"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,11 +57,12 @@
                     android:layout_height="50dp"
                     android:text="계열사"
                     android:textSize="13sp"/>
-                <Button
-                    android:id="@+id/subsidiaryButton"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/common_action_bar_splitter"/>
+
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user_spinner_company"
+                    android:layout_weight="1" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,10 +73,12 @@
                     android:layout_height="50dp"
                     android:text="사업장"
                     android:textSize="13sp"/>
-                <Button
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/common_action_bar_splitter"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user_spinner_division"
+                    android:layout_weight="1" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,10 +89,12 @@
                     android:layout_height="50dp"
                     android:text="건물명 :"
                     android:textSize="13sp"/>
-                <Button
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/common_action_bar_splitter"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/user_spinner_building"
+                    android:layout_weight="1" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,8 +109,8 @@
                 <EditText
                     android:layout_width="200dp"
                     android:layout_height="50dp"
-                    android:hint =""
-                    android:inputType="date"/>
+                    android:hint ="ex) x 층 x파티션 "
+                    android:id="@+id/user_location"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,7 +120,8 @@
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:text="방문 희망일 :"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:layout_gravity="center" />
 
                 <Button
                     android:layout_width="20dp"
@@ -177,7 +184,8 @@
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:text="이름 :"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp"
+                        android:id="@+id/receiver_email"/>
                     <EditText
                         android:layout_width="200dp"
                         android:layout_height="50dp"
@@ -207,10 +215,13 @@
                         android:layout_height="50dp"
                         android:text="계열사"
                         android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/receiver_spinner_company"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -221,10 +232,12 @@
                         android:layout_height="50dp"
                         android:text="사업장"
                         android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/receiver_spinner_division"
+                        android:layout_weight="1" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -235,10 +248,12 @@
                         android:layout_height="50dp"
                         android:text="건물명 :"
                         android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/receiver_spinner_building"
+                        android:layout_weight="1" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -254,7 +269,7 @@
                         android:layout_width="200dp"
                         android:layout_height="50dp"
                         android:hint =""
-                        android:inputType="date"/>
+                        android:id="@+id/receiver_location"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -268,7 +283,28 @@
                     <Button
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
+                        android:onClick="setExpectedDate"
+                        android:background="@color/common_action_bar_splitter"
+                        android:text="D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/expectedDate" />
+
+                    <Button
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:onClick="setExpectedTime"
+                        android:background="@color/common_action_bar_splitter"
+                        android:text="T" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/expectedTime" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

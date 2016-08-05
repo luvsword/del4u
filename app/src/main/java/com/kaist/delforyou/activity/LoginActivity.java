@@ -133,10 +133,11 @@ public class LoginActivity extends Activity {
                         String fname = user.getString("firstname");
                         String lname = user.getString("lastname");
                         String email = user.getString("email");
-//                        String employeeid = user.getString("employeeid");
-                        String employeeid = "0011";
+                        String employeeid = user.getString("employeeid");
+                        String phone = user.getString("phoneno");
+
                         // Inserting row in users table
-                        db.addUser(fname, lname, email, employeeid);
+                        db.addUser(fname, lname, email, employeeid, phone);
 
                         // Launch main activity
                         Intent intent = new Intent(LoginActivity.this,

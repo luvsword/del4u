@@ -148,53 +148,41 @@
             android:layout_height="50dp"
             android:layout_marginLeft="30dp">
 
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:text="아이디(사번):"
-                android:textSize="13sp"/>
             <EditText
                 android:id="@+id/employeeid"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint =""
-                android:inputType="phone"/>
-
+                android:hint="사번" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="30dp">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:text="비밀번호:"
-                android:textSize="13sp"/>
             <EditText
                 android:id="@+id/password"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="textPassword"
-                android:hint=""/>
+                android:hint="비밀번호" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="30dp">
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:text="비밀번호 확인:"
-                android:textSize="13sp"/>
             <EditText
                 android:id="@+id/cpassword"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="textPassword"
-                android:hint=""/>
+                android:hint="비밀번호 확인" />
         </LinearLayout>
-
+        <CheckBox
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/deliveryjob"
+            android:text="나는 배달원입니다"/>
         <CheckBox
             android:layout_width="300dp"
             android:layout_height="50dp"

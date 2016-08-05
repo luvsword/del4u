@@ -8,6 +8,6 @@ public class AppConfig {
     public static String URL_LOGIN = "";
 
     // Server user register url
-    public static String URL_REGISTER = "";
+    public static String URL_REGISTER = "http://125.131.73.146/register.php";
 }
 

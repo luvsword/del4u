@@ -135,14 +135,20 @@ public class LoginActivity extends Activity {
                         String email = user.getString("email");
                         String employeeid = user.getString("employeeid");
                         String phone = user.getString("phoneno");
+                        String jobposition = user.getString("jobposition");
 
                         // Inserting row in users table
-                        db.addUser(fname, lname, email, employeeid, phone);
+                        db.addUser(fname, lname, email, employeeid, phone, jobposition);
 
-                        // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainMenuActivityforDeliveryMen.class);
-
+                        Intent intent;
+                        if (jobposition.equals("111")) {
+                            Log.i("HOHO", "delivery person!");
+                            intent = new Intent(LoginActivity.this, MainMenuActivityforDeliveryMen.class);
+                        }
+                        else {
+                            Log.i("HOHO", "What!");
+                            intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                        }
                         startActivity(intent);
                         finish();
                     } else {

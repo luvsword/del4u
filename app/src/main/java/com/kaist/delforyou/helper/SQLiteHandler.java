@@ -24,11 +24,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String TABLE_USER = "user";
 
     // Login Table Columns names
-    private static final String KEY_EID = "id";
+    private static final String KEY_EID = "eid";
     private static final String KEY_FNAME = "fname";
     private static final String KEY_LNAME = "lname";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_PHONE = "phone";
+    private static final String KEY_JOBPOSITION = "jobposition";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,7 +40,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
                 + KEY_FNAME + " TEXT," + KEY_LNAME +" TEXT," + KEY_EMAIL + " TEXT PRIMARY KEY,"
-                + KEY_EID + " INTEGER, " + KEY_PHONE + " TEXT)";
+                + KEY_EID + " TEXT, " + KEY_PHONE + " TEXT, " + KEY_JOBPOSITION + " TEXT)";
         db.execSQL(CREATE_LOGIN_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -58,7 +59,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String fname, String lname, String email, String eid, String phone) {
+    public void addUser(String fname, String lname, String email, String eid, String phone, String jobposition) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -66,7 +67,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_LNAME, lname);
         values.put(KEY_EMAIL, email);
         values.put(KEY_EID, eid);
-        values.put(KEY_PHONE, phone); // Email
+        values.put(KEY_PHONE, phone);
+        values.put(KEY_JOBPOSITION, jobposition);
 
         // Inserting Row
         long id = db.insert(TABLE_USER, null, values);
@@ -92,6 +94,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("email", cursor.getString(2));
             user.put("eid", cursor.getString(3));
             user.put("phone", cursor.getString(4));
+            user.put("jobposition", cursor.getString(5));
         }
         cursor.close();
         db.close();
@@ -112,6 +115,4 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         Log.d(TAG, "Deleted all user info from sqlite");
     }
-
 }
-

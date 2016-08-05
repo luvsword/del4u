@@ -181,8 +181,9 @@ public class ModefySignInfoActivity extends Activity {
                         String lname = user.getString("lastname");
                         String email = user.getString("email");
                         String phone = user.getString("phoneno");
+                        String jobposition = user.getString("jobposition");
                         // Inserting row in users table
-                        db.addUser(fname, lname, email, eid, phone);
+                        db.addUser(fname, lname, email, eid, phone, jobposition);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 

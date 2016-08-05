@@ -59,16 +59,6 @@ public class SignupActivity extends Activity {
     private SessionManager session;
     private SQLiteHandler db;
 
-    Spinner spinner;
-
-    String[] companies2 = {
-            "LG Electronics",
-            "Samsung Electronics",
-            "LG Chem Ltd.",
-            "GE Healthcare Korea",
-            "만도"
-    };
-
     PHP_GetCompnayInfo taskPHP;
     Spinner spinner_businessgroup;
     Spinner spinner_company;
@@ -191,7 +181,8 @@ public class SignupActivity extends Activity {
                             String lname = user.getString("lastname");
                             String email = user.getString("email");
                             String phone = user.getString("phoneno");
-                            db.addUser(fname, lname, email, eid, phone);
+                            String jobposition = user.getString("jobposition");
+                            db.addUser(fname, lname, email, eid, phone, jobposition);
 
                             Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
                             // Launch login activity

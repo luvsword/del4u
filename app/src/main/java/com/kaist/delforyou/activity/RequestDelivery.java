@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import android.util.Log;
 
 public class RequestDelivery  {
-
+    private static final String TAG = ReservationActivity.class.getSimpleName();
     public String senderEmail;
     public String recipientEmail;
     public String pickupBuildingId;
@@ -39,7 +40,7 @@ public class RequestDelivery  {
     public class DeliveryItem {
         public String categoryId;
         public String description;
-        public String count;
+        public int count;
         public String dimension;
     }
 
@@ -47,7 +48,9 @@ public class RequestDelivery  {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
         c.set(year, month, day, hour, minutes);
+        Log.d(TAG, "datetime = " + year +"," + month +"," + day  +"," +hour +  "," + minutes );
         // TODO Auto-generated method stub
+        Log.d(TAG, "format date = " + f.format(c.getTimeInMillis()));
         return f.format(c.getTimeInMillis());
     }
 
@@ -55,7 +58,6 @@ public class RequestDelivery  {
         try {
             info.put("connectType", "setreservation");
             info.put("serverInfo", AppConfig.URL_SETREVINFO);
-            info.put("senderEmail", senderEmail);
             info.put("senderEmail", senderEmail);
             info.put("recipientEmail", recipientEmail);
             info.put("pickupBuildingId", pickupBuildingId);

@@ -1,28 +1,26 @@
 package com.kaist.delforyou.activity;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 
 import android.app.Dialog;
-import android.net.Uri;
 import android.view.Menu;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.AsyncTask;
+
 import android.view.View;
 import android.widget.TextView;
 import android.util.Log;
 
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +31,7 @@ import com.kaist.delforyou.helper.DatabaseAsynTask;
 import com.kaist.delforyou.helper.SQLiteHandler;
 import com.kaist.delforyou.helper.SessionManager;
 import com.kaist.delforyou.activity.Category;
+import com.kaist.delforyou.activity.RequestDelivery;
 import org.w3c.dom.Text;
 
 import android.widget.Toast;
@@ -66,9 +65,7 @@ public class ReservationActivity extends Activity {
     private Calendar calendar;
     private TextView requestDateView, requestTimeView;
     private TextView expectedDateView, expectedTimeView;
-    private String requestDate, requestTime;
-    private String expectedDate, expectedTime;
-    //    private int requestYear, requestMonth, requestDay, requestHour, requestMinutes;
+
     private int datePickerId = 999;
     private int timePickerId = 998;
     private int dateExpectedPickerId = 997;
@@ -98,7 +95,6 @@ public class ReservationActivity extends Activity {
     private RequestDelivery RDObject;
 
     private Category comInfo;
-    private DatabaseAsynTask dbControl;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -118,7 +114,7 @@ public class ReservationActivity extends Activity {
         db = new SQLiteHandler(getApplicationContext());
 
         RDObject = new RequestDelivery();
-
+        RDObject.itemList = new ArrayList<RequestDelivery.DeliveryItem>();
         comInfo = new Category();
 
         comInfo.groups = new HashMap<>();
@@ -338,12 +334,6 @@ public class ReservationActivity extends Activity {
     private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker arg0, int year, int month, int day) {
-            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            final Calendar c = Calendar.getInstance();
-            c.set(year, month, day);
-            // TODO Auto-generated method stub
-            requestDate = f.format(c.getTimeInMillis());
-            Log.d(TAG, "requestDate = " + requestDate);
             RDObject.requestYear = year;
             RDObject.requestMonth = month + 1;
             RDObject.requestDay = day;
@@ -457,13 +447,28 @@ public class ReservationActivity extends Activity {
     protected void populateBuildingSpinner(String divisionID) {
         Log.i(TAG, "divisionID) " + divisionID);
         Log.i(TAG, "buildingHashMap) " + comInfo.buildings.toString());
-        HashMap<String, String> buildingHashMap = comInfo.buildings.get(divisionID);
+        final HashMap<String, String> buildingHashMap = comInfo.buildings.get(divisionID);
+
         if (buildingHashMap != null) {
             final ArrayList<String> buildingList = new ArrayList<>(buildingHashMap.values());
             ArrayAdapter<String> adapter =
                     new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, buildingList);
 
             senderSpinnerBuilding.setAdapter(adapter);
+            senderSpinnerBuilding.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            int position= senderSpinnerBuilding.getSelectedItemPosition();
+                            Toast.makeText(getApplicationContext(), "You select " + buildingList.toArray()[+position],Toast.LENGTH_SHORT).show();
+                            RDObject.pickupBuildingId = buildingHashMap.keySet().toArray()[+position].toString();
+                            Log.d(TAG, "Building ID = " + RDObject.pickupBuildingId);
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> arg0) {
+                        }
+                    }
+            );
         } else {
             senderSpinnerBuilding.setAdapter(null);
         }
@@ -520,17 +525,31 @@ public class ReservationActivity extends Activity {
     protected void populateRBuildingSpinner(String divisionID) {
         Log.i(TAG, "divisionID) " + divisionID);
         Log.i(TAG, "buildingHashMap) " + comInfo.buildings.toString());
-        HashMap<String, String> buildingHashMap = comInfo.buildings.get(divisionID);
+        final HashMap<String, String> buildingHashMap = comInfo.buildings.get(divisionID);
+
         if (buildingHashMap != null) {
             final ArrayList<String> buildingList = new ArrayList<>(buildingHashMap.values());
             ArrayAdapter<String> adapter =
                     new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, buildingList);
 
             receiverSpinnerBuilding.setAdapter(adapter);
+            receiverSpinnerBuilding.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                            int position= receiverSpinnerBuilding.getSelectedItemPosition();
+                            Toast.makeText(getApplicationContext(), "You select " + buildingList.toArray()[+position],Toast.LENGTH_SHORT).show();
+                            RDObject.shippingBuildingId = buildingHashMap.keySet().toArray()[+position].toString();
+                            Log.d(TAG, "Building ID = " + RDObject.shippingBuildingId);
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> arg0) {
+                        }
+                    }
+            );
         } else {
             receiverSpinnerBuilding.setAdapter(null);
         }
-
     }
 
     // 요청사항 버튼 눌렀을 시,
@@ -542,6 +561,12 @@ public class ReservationActivity extends Activity {
     // 예약확인 버튼 눌렀을 시,
     public void reservationConfirm(View v) {
 
+        String res = null;
+        JSONObject tjson = new JSONObject();
+        DatabaseAsynTask dbCon = new DatabaseAsynTask();
+
+        RDObject.itemList.clear();
+
         TextView textInfo = (TextView) findViewById(R.id.receiver_email);
         RDObject.recipientEmail = textInfo.getText().toString();
 
@@ -552,8 +577,45 @@ public class ReservationActivity extends Activity {
 
         textInfo = (TextView) findViewById(R.id.receiver_location);
         RDObject.shippingLocation = textInfo.getText().toString();
-    }
 
+        RequestDelivery.DeliveryItem test1 = RDObject.new DeliveryItem();
+        test1.categoryId = "000";
+        test1.count = 3;
+        test1.description = "LG G5";
+        test1.dimension = "000";
+
+        RequestDelivery.DeliveryItem test2 = RDObject.new DeliveryItem();
+        test2.categoryId = "005";
+        test2.count = 1;
+        test2.description = "LG TV";
+        test2.dimension = "004";
+
+        RDObject.itemList.add(test1);
+        RDObject.itemList.add(test2);
+
+        RDObject.getJSONData(tjson);
+        Log.d(TAG, "Reservation = " + tjson.toString());
+
+        try {
+            res = dbCon.execute(tjson).get();
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+
+        try {
+            JSONObject root = new JSONObject(res);
+            JSONObject results = root.getJSONObject("result");
+
+            String deliveryid = results.getString("deliveryid");
+
+            Log.d(TAG, "deliveryID = " + deliveryid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     // 예약취소 버튼 눌렀을 시,
     public void reservationCancel(View v) {
         Intent intent = new Intent(ReservationActivity.this, MainMenuActivity.class);

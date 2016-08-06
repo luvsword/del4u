@@ -184,12 +184,12 @@
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:text="이름 :"
-                        android:textSize="13sp"
-                        android:id="@+id/receiver_email"/>
+                        android:textSize="13sp" />
                     <EditText
                         android:layout_width="200dp"
                         android:layout_height="50dp"
-                        android:hint="" />
+                        android:hint=""
+                        android:id="@+id/receiver_email"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

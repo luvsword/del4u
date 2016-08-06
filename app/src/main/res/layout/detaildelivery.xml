@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,21 +18,25 @@
             android:textSize="13sp"/>
         <TextView
             android:layout_width="200dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:id="@+id/deliveryid"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="30dp">
     <TextView
         android:layout_width="100dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:text="물품명 :"
         android:textSize="13sp"/>
     <TextView
         android:layout_width="200dp"
-        android:layout_height="20dp" />
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:id="@+id/itemDescription"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +50,9 @@
             android:textSize="13sp"/>
         <TextView
             android:layout_width="200dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:id="@+id/senderinfo"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +66,9 @@
             android:textSize="13sp"/>
         <TextView
             android:layout_width="200dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:id="@+id/receiverinfo"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,7 +82,9 @@
             android:textSize="13sp"/>
         <TextView
             android:layout_width="200dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:id="@+id/DrequestDate"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +98,41 @@
             android:textSize="13sp"/>
         <TextView
             android:layout_width="200dp"
-            android:layout_height="20dp" />
+            android:layout_height="20dp"
+            android:textSize="13sp"
+            android:id="@+id/DexpectedDate"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="보내는 장소 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:id="@+id/pickupLocation"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="30dp">
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="받는 장소 :"
+            android:textSize="13sp"/>
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:id="@+id/shippingLocation"/>
     </LinearLayout>
     <TextView
         android:layout_width="200dp"
@@ -134,19 +181,21 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp">
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
+            android:id="@+id/statuslog1"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
+            android:text="요청 중"
             android:background="@color/common_action_bar_splitter"/>
 
         <Button
@@ -166,12 +215,14 @@
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:textSize="13sp"
+            android:id="@+id/statuslog2"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
+            android:text="배달 중"
             android:background="@color/common_action_bar_splitter"/>
 
         <Button
@@ -190,12 +241,14 @@
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:textSize="13sp"
+            android:id="@+id/statuslog3"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
             android:layout_height="20dp"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
+            android:text="배송 완료"
             android:background="@color/common_action_bar_splitter"/>
 
         <Button
@@ -207,3 +260,4 @@
 
     </LinearLayout>
 </LinearLayout>
+    </ScrollView>

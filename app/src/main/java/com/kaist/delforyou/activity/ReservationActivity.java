@@ -317,13 +317,13 @@ public class ReservationActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
         if (id == datePickerId) {
             return new DatePickerDialog(this, myDateListener,
-                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         } else if (id == timePickerId) {
             return new TimePickerDialog(this, myTimeListerner,
                     calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         } else if (id == dateExpectedPickerId) {
             return new DatePickerDialog(this, myExpectedDateListener,
-                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         } else if (id == timeExpectedPickerId) {
             return new TimePickerDialog(this, myExpectedTimeListerner,
                     calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
@@ -334,9 +334,8 @@ public class ReservationActivity extends Activity {
     private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker arg0, int year, int month, int day) {
-            RDObject.requestYear = year;
-            RDObject.requestMonth = month + 1;
-            RDObject.requestDay = day;
+
+
             showDate(year, month + 1, day);
         }
     };
@@ -344,22 +343,27 @@ public class ReservationActivity extends Activity {
     private DatePickerDialog.OnDateSetListener myExpectedDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker arg0, int year, int month, int day) {
-            RDObject.expectedYear = year;
-            RDObject.expectedMonth = month + 1;
-            RDObject.expectedDay = day;
             // TODO Auto-generated method stub
             showExpectedDate(year, month + 1, day);
         }
     };
 
     private void showDate(int year, int month, int day) {
+        RDObject.requestYear = year;
+        RDObject.requestMonth = month;
+        RDObject.requestDay = day;
+        Log.d(TAG, "month = " + month + "RDO.month = " + RDObject.requestMonth);
         requestDateView.setText(new StringBuilder().append(year).append("/").append(month).append("/")
                 .append(day));
     }
 
     private void showExpectedDate(int year, int month, int day) {
+        RDObject.expectedYear = year;
+        RDObject.expectedMonth = month;
+        RDObject.expectedDay = day;
         expectedDateView.setText(new StringBuilder().append(year).append("/").append(month).append("/")
                 .append(day));
+        Log.d(TAG, "month = " + month + "RDO.month = " + RDObject.expectedMonth);
     }
 
     @SuppressWarnings("deprecation")
@@ -375,8 +379,7 @@ public class ReservationActivity extends Activity {
     private TimePickerDialog.OnTimeSetListener myTimeListerner = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            RDObject.requestHour = hourOfDay;
-            RDObject.requestMinutes = minute;
+
             showTime(hourOfDay, minute);
         }
     };
@@ -385,17 +388,19 @@ public class ReservationActivity extends Activity {
 
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            RDObject.expectedHour = hourOfDay;
-            RDObject.expectedMinutes = minute;
             showExpectedTime(hourOfDay, minute);
         }
     };
 
     private void showTime(int hourOfDay, int minute) {
+        RDObject.requestHour = hourOfDay;
+        RDObject.requestMinutes = minute;
         requestTimeView.setText(new StringBuilder().append(hourOfDay).append("::").append(minute));
     }
 
     private void showExpectedTime(int hourOfDay, int minute) {
+        RDObject.expectedHour = hourOfDay;
+        RDObject.expectedMinutes = minute;
         expectedTimeView.setText(new StringBuilder().append(hourOfDay).append("::").append(minute));
     }
     protected void populateComSpinner(String groupID) {
@@ -426,7 +431,7 @@ public class ReservationActivity extends Activity {
         final HashMap<String, String> divisionHashMap = comInfo.divisions.get(companyID);
         final ArrayList<String> divisionList = new ArrayList<>(divisionHashMap.values());
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, divisionList);
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, divisionList);
 
         senderSpinnerDivision.setAdapter(adapter);
         senderSpinnerDivision.setOnItemSelectedListener(
@@ -452,7 +457,7 @@ public class ReservationActivity extends Activity {
         if (buildingHashMap != null) {
             final ArrayList<String> buildingList = new ArrayList<>(buildingHashMap.values());
             ArrayAdapter<String> adapter =
-                    new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, buildingList);
+                    new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, buildingList);
 
             senderSpinnerBuilding.setAdapter(adapter);
             senderSpinnerBuilding.setOnItemSelectedListener(
@@ -480,7 +485,7 @@ public class ReservationActivity extends Activity {
         final HashMap<String, String> companyHashMap = comInfo.companies.get(groupID);
         final ArrayList<String> companyList = new ArrayList<>(companyHashMap.values());
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, companyList);
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, companyList);
 
         receiverSpinnerCompany.setAdapter(adapter);
         receiverSpinnerCompany.setOnItemSelectedListener(
@@ -503,7 +508,7 @@ public class ReservationActivity extends Activity {
         final HashMap<String, String> divisionHashMap = comInfo.divisions.get(companyID);
         final ArrayList<String> divisionList = new ArrayList<>(divisionHashMap.values());
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, divisionList);
+                new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, divisionList);
 
         receiverSpinnerDivision.setAdapter(adapter);
         receiverSpinnerDivision.setOnItemSelectedListener(
@@ -530,7 +535,7 @@ public class ReservationActivity extends Activity {
         if (buildingHashMap != null) {
             final ArrayList<String> buildingList = new ArrayList<>(buildingHashMap.values());
             ArrayAdapter<String> adapter =
-                    new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, buildingList);
+                    new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, buildingList);
 
             receiverSpinnerBuilding.setAdapter(adapter);
             receiverSpinnerBuilding.setOnItemSelectedListener(

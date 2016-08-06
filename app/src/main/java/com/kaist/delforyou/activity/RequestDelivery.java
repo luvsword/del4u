@@ -47,7 +47,7 @@ public class RequestDelivery  {
     public String getDateTimeformat(int year, int month, int day, int hour, int minutes) {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
-        c.set(year, month, day, hour, minutes);
+        c.set(year, month-1, day, hour, minutes);
         Log.d(TAG, "datetime = " + year +"," + month +"," + day  +"," +hour +  "," + minutes );
         // TODO Auto-generated method stub
         Log.d(TAG, "format date = " + f.format(c.getTimeInMillis()));

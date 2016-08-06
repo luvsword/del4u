@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import com.kaist.delforyou.app.AppConfig;
 
 /**
  * Created by user on 2016-07-23.
@@ -40,7 +41,7 @@ public class MainMenuActivity extends Activity {
         setContentView(R.layout.mainmenuactivity);
 
         taskPHP = new PHP_GetDeliveryRequest();
-        taskPHP.execute("http://125.131.73.146/delivery_list.php");
+        taskPHP.execute(AppConfig.URL_GETDELIVERY);
 
         deliveryList = (ListView)findViewById(R.id.list_item);
     }

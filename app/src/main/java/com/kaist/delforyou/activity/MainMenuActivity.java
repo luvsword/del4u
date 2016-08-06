@@ -1,20 +1,48 @@
 package com.kaist.delforyou.activity;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 
 import com.kaist.delforyou.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by user on 2016-07-23.
  */
 public class MainMenuActivity extends Activity {
+    private ListView deliveryList;
+    PHP_GetDeliveryRequest taskPHP;
+    HashMap<String, HashMap<String, String>> deliveries = new HashMap<>();
+    HashMap<String, ArrayList<Item>> deliveryItems = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenuactivity);
+
+        taskPHP = new PHP_GetDeliveryRequest();
+        taskPHP.execute("http://125.131.73.146/delivery_list.php");
+
+        deliveryList = (ListView)findViewById(R.id.list_item);
     }
 
     //보낸택배 버튼 눌렀을 시,
@@ -76,5 +104,103 @@ public class MainMenuActivity extends Activity {
     public void setting(View v) {
         Intent intent = new Intent(MainMenuActivity.this, SettingActivity.class);
         startActivity(intent);
+    }
+
+    protected void fillItemList() {
+        Log.i("HOHO", "Now, populate item list!");
+    }
+
+    private class PHP_GetDeliveryRequest extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            StringBuilder jsonHtml = new StringBuilder();
+            try {
+                URL url = new URL(urls[0]);
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
+
+                String postParameters = "email=delforyou@kaist.ac.kr";
+                //Send request
+                DataOutputStream wr = new DataOutputStream (conn.getOutputStream ());
+                wr.writeBytes (postParameters);
+                wr.flush ();
+                wr.close ();
+
+                //conn.setFixedLengthStreamingMode(postParameters.getBytes().length);
+                //PrintWriter out = new PrintWriter(conn.getOutputStream());
+                //out.print(postParameters);
+                //out.close();
+
+                if (conn!=null){
+                    conn.setConnectTimeout(10000);
+                    Log.i("HOHO", "Response Code) "+ conn.getResponseCode());
+                    //conn.setUseCaches(false);
+                    if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        Log.i("HOHO", "Not here2 ?");
+                        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                        for(;;) {
+                            String line = br.readLine();
+                            if (line == null) break;
+                            jsonHtml.append(line + "\n");
+                        }
+                        br.close();
+                    }
+                    conn.disconnect();
+                }
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return
+                    jsonHtml.toString();
+        }
+        protected void onPostExecute(String str){
+            try {
+                JSONObject root = new JSONObject(str);
+                JSONObject results = root.getJSONObject("results");
+                Log.i("HOHO", "results -> " + results.toString());
+                JSONArray delivery = results.getJSONArray("delivery");
+                Log.i("HOHO", "delivery item count) " + delivery.length());
+
+                for (int index=0; index<delivery.length(); index++){
+                    JSONObject jo = delivery.getJSONObject(index);
+                    if (deliveries.containsKey(jo.getString("id"))) {
+                        ArrayList<Item> items = new ArrayList<>();
+                        Item it = new Item(jo.getString("item"), jo.getString("category"),
+                                jo.getInt("count"), jo.getString("dimension"));
+                        deliveryItems.get(jo.getString("id")).add(it);
+                    } else {
+                        HashMap<String, String> list = new HashMap<>();
+                        list.put("name", jo.getString("name"));
+                        list.put("shipping", jo.getString("shipping"));
+                        deliveries.put(jo.getString("id"), list);
+
+                        ArrayList<Item> items = new ArrayList<>();
+                        Item it = new Item(jo.getString("item"), jo.getString("category"),
+                                           jo.getInt("count"), jo.getString("dimension"));
+                        items.add(it);
+                        deliveryItems.put(jo.getString("id"), items);
+                    }
+                }
+                fillItemList();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class Item {
+        private String description;
+        private String category;
+        private int count;
+        private String dimensions;
+
+        public Item(String description, String category, int count, String dimensions) {
+            this.description = description;
+            this.category = category;
+            this.count = count;
+            this.dimensions = dimensions;
+        }
     }
 }

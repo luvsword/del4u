@@ -146,7 +146,6 @@ public class LoginActivity extends Activity {
                             intent = new Intent(LoginActivity.this, MainMenuActivityforDeliveryMen.class);
                         }
                         else {
-                            Log.i("HOHO", "What!");
                             intent = new Intent(LoginActivity.this, MainMenuActivity.class);
                         }
                         startActivity(intent);

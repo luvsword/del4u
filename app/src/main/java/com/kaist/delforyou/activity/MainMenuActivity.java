@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.kaist.delforyou.R;
@@ -22,7 +23,12 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import com.kaist.delforyou.app.AppConfig;
 
@@ -33,7 +39,7 @@ public class MainMenuActivity extends Activity {
     private ListView deliveryList;
     PHP_GetDeliveryRequest taskPHP;
     HashMap<String, HashMap<String, String>> deliveries = new HashMap<>();
-    HashMap<String, ArrayList<Item>> deliveryItems = new HashMap<>();
+    HashMap<String, ArrayList<ListItem>> deliveryItems = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +48,6 @@ public class MainMenuActivity extends Activity {
 
         taskPHP = new PHP_GetDeliveryRequest();
         taskPHP.execute(AppConfig.URL_GETDELIVERY);
-
-        deliveryList = (ListView)findViewById(R.id.list_item);
     }
 
     //보낸택배 버튼 눌렀을 시,
@@ -108,7 +112,40 @@ public class MainMenuActivity extends Activity {
     }
 
     protected void fillItemList() {
-        Log.i("HOHO", "Now, populate item list!");
+        ListView listView;
+        ListViewAdapter adapter = new ListViewAdapter();
+
+        listView = (ListView)findViewById(R.id.deliveryRequestList);
+        listView.setAdapter(adapter);
+
+        Log.i("HOHO", "After setAdapter..");
+        for (String key : deliveries.keySet()) {
+            HashMap<String, String> deliveryInfo = deliveries.get(key);
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date;
+            int month = 0;
+            int day = 0;
+            int dayOfWeek = 0;
+            String[] namesOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
+            Log.i("HOHO", "here ?");
+            try {
+                date = transFormat.parse(deliveryInfo.get("time"));
+                Log.i("HOHO", "Or, here ?");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                Log.i("HOHO", "XXXXXXXXXXX?");
+                month = cal.get(Calendar.MONTH);
+                day = cal.get(Calendar.DAY_OF_MONTH);
+                dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+            } catch (ParseException e) {
+                // TODO::
+            }
+
+            String itemDescription = deliveryItems.get(key).get(0).getItemDescription();
+            adapter.addItems(Integer.toString(month+1) + "." + Integer.toString(day),
+                             namesOfDays[dayOfWeek], itemDescription,
+                             deliveryInfo.get("name"), deliveryInfo.get("shipping"));
+        }
     }
 
     private class PHP_GetDeliveryRequest extends AsyncTask<String, Integer, String> {
@@ -137,7 +174,6 @@ public class MainMenuActivity extends Activity {
                     Log.i("HOHO", "Response Code) "+ conn.getResponseCode());
                     //conn.setUseCaches(false);
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                        Log.i("HOHO", "Not here2 ?");
                         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                         for(;;) {
                             String line = br.readLine();
@@ -160,48 +196,36 @@ public class MainMenuActivity extends Activity {
             try {
                 JSONObject root = new JSONObject(str);
                 JSONObject results = root.getJSONObject("results");
-                Log.i("HOHO", "results -> " + results.toString());
                 JSONArray delivery = results.getJSONArray("delivery");
                 Log.i("HOHO", "delivery item count) " + delivery.length());
 
                 for (int index=0; index<delivery.length(); index++){
                     JSONObject jo = delivery.getJSONObject(index);
+                    Log.i("HOHO", "Inside loop) " + jo.toString());
                     if (deliveries.containsKey(jo.getString("id"))) {
-                        ArrayList<Item> items = new ArrayList<>();
-                        Item it = new Item(jo.getString("item"), jo.getString("category"),
-                                jo.getInt("count"), jo.getString("dimension"));
+                        ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
+                                jo.getString("description"), jo.getString("category"));
                         deliveryItems.get(jo.getString("id")).add(it);
                     } else {
                         HashMap<String, String> list = new HashMap<>();
                         list.put("name", jo.getString("name"));
                         list.put("shipping", jo.getString("shipping"));
+                        list.put("time", jo.getString("time"));
                         deliveries.put(jo.getString("id"), list);
 
-                        ArrayList<Item> items = new ArrayList<>();
-                        Item it = new Item(jo.getString("item"), jo.getString("category"),
-                                           jo.getInt("count"), jo.getString("dimension"));
+                        ArrayList<ListItem> items = new ArrayList<>();
+                        //ListItem it = new ListItem("haha", "hoho", "abc", "XYZ", "KK");
+                        ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
+                                           jo.getString("description"), jo.getString("category"));
                         items.add(it);
                         deliveryItems.put(jo.getString("id"), items);
                     }
                 }
+                Log.i("HOHO", "You see here?");
                 fillItemList();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private class Item {
-        private String description;
-        private String category;
-        private int count;
-        private String dimensions;
-
-        public Item(String description, String category, int count, String dimensions) {
-            this.description = description;
-            this.category = category;
-            this.count = count;
-            this.dimensions = dimensions;
         }
     }
 }

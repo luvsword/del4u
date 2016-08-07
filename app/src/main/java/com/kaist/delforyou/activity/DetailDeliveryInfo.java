@@ -17,6 +17,8 @@ import java.util.Iterator;
 
 public class DetailDeliveryInfo {
     private static final String TAG = DetailDeliveryInfo.class.getSimpleName();
+    public String senderEmail;
+    public String receiverEmail;
     public String senderInfo; //(name + phone)
     public String receiverInfo; //(name + phone)
     public int deliveryId;
@@ -43,6 +45,8 @@ public class DetailDeliveryInfo {
                 shippingLocInfo = info.getString("shippingInfo"); //building + location
                 requestDate = info.getString("requestdate");
                 expectedDate = info.getString("expecteddeliverydate");
+                senderEmail = info.getString("sender");
+                receiverEmail = info.getString("recipient");
                 itemList.add(info.getString("itemInfo"));
                 Log.d(TAG, senderInfo + "/" + receiverInfo + "/" + pickupLocInfo + "/" + shippingLocInfo + "/" + requestDate + "/" + expectedDate + "/" + itemList.get(index));
             }

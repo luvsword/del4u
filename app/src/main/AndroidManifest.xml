@@ -34,6 +34,9 @@
             android:name=".activity.DetailDeliveryActivity">
         </activity>
         <activity
+            android:name=".activity.DetailDeliveryActivityforDeliveryMen">
+        </activity>
+        <activity
             android:name=".activity.DeliveryMenViewActivity">
         </activity>
         <activity

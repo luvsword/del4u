@@ -6,24 +6,11 @@ package com.kaist.delforyou.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
-import android.util.Log;
-import android.os.AsyncTask;
 import android.widget.TextView;
-import android.widget.BaseAdapter;
-
-import com.android.volley.Request;
-import com.android.volley.Request.Method;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,20 +18,15 @@ import org.json.JSONArray;
 
 
 
-import com.kaist.delforyou.MainActivity;
+
 import com.kaist.delforyou.R;
-import com.kaist.delforyou.app.AppConfig;
-import com.kaist.delforyou.app.AppController;
 import com.kaist.delforyou.helper.SQLiteHandler;
 import com.kaist.delforyou.helper.SessionManager;
-import com.kaist.delforyou.activity.MainMenuActivityforDeliveryMen;
-import com.kaist.delforyou.activity.SignupActivity;
-import com.kaist.delforyou.activity.UserData;
+
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -63,19 +45,9 @@ import java.io.ByteArrayInputStream;
  */
 public class DeliveryMenViewActivity extends Activity {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
-    private ProgressDialog pDialog;
-    private DeliveryMenViewActivity DeliveryMenViewActivity;
-
-    private SessionManager session;
-    private SQLiteHandler db;
     String email_id = "delforyou@kaist.ac.kr";
-    String getLastname = "KIM";
     Context context;
 
-    int NameID;
-    String Name;
-    String Birth;
     String routine;
     String view_info;
 
@@ -85,26 +57,22 @@ public class DeliveryMenViewActivity extends Activity {
     String divisionid;
     String workplace;
     String employeeid;
-    String getinfoDB = "firstname, lastname, phoneno, divisionid, workplace, employeeid";
-    String fromQ = "employee where firstname = bum";
-    TextView textView;
-//    String url ="http://localhost/family.php";
-//    String url ="http://gyeongmo.synology.me/ojin/index.php";
-//    String url ="http://125.131.73.79:4002/delforyou/login.php";
 
-    // 서버에서 게시글 정보 가져오기 (JSON 형태)
+    String buildingname;
+    String description;
+    TextView textView;
 
 
     public void loadEmployee() {
 
-        ComWithServer cws = new ComWithServer(context); // 서버와 통신하는 Class
+        ComWithServer cws = new ComWithServer(context); // ?쒕쾭? ?듭떊?섎뒗 Class
 //        String sql = "select" + getinfoDB + "from employee where email =  " + '"' + email_id + '"' + ";" ;
         String sql = "select workplace, lastname, firstname, divisionid, phoneno, employeeid from employee where email = " + '"' + email_id + '"' + ";";
-//        String sql = "select workplace, lastname, firstname, divisionid, phoneno, employeeid from employee where lastname = " + '"' + getLastname + '"' + ";";
-//        String sql = "select * from employee where email = delforyou@kaist.ac.kr;" ;
-//        String sql = "select * from "+ fromQ + ";";//employee;";
+
+
+
         String employee = cws.communicationTask(sql, "delivermen");
-        // json 값 parsing
+        // json 媛?parsing
         try {
             JSONArray jsonArray = new JSONArray(employee);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -121,6 +89,37 @@ public class DeliveryMenViewActivity extends Activity {
             e.printStackTrace();
         }
 
+        String sql_b = "select buildingname from building where buildingid = " + '"' + workplace + '"' + ";";
+        //String sql_b = "select buildingname from building;";// where buildingid = " + '"' + workplace + '"' + ";";
+
+        String building = cws.communicationTask(sql_b, "delivermen");
+        // json 媛?parsing
+        try {
+            JSONArray jsonArray = new JSONArray(building);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                buildingname = jsonObject.getString("buildingname");
+                routine = "passed";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String sql_d = "select description from division where divisionid = " + '"' + divisionid + '"' + ";";
+
+        String division = cws.communicationTask(sql_d, "delivermen");
+        // json 媛?parsing
+        try {
+            JSONArray jsonArray = new JSONArray(division);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                description = jsonObject.getString("description");
+                routine = "passed";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -130,44 +129,31 @@ public class DeliveryMenViewActivity extends Activity {
         context = getApplicationContext();
 
         loadEmployee();
-        view_info = firstname + "\n" + lastname + "\n" + divisionid + "\n" + phoneno + "\n" + workplace;
+        view_info = "\n" + "\n" + "\n" + description + "\n" +  "\n" + buildingname + "\n" + "\n" + lastname + firstname + "\n" +"\n" + phoneno   ;
         textView = (TextView) findViewById(R.id.mn_email);
         textView.setText(view_info);
-//        textView.setText(NameID);
-//        textView.setText(Birth);
-        textView.setTextSize(20);
+        textView.setTextSize(15);
 
 
     }
 
-
-//    testView.setText(Birth);
-
-//    textElement.setText("I love you");
 
     public void connectMessage(View v) {
-
-//        loadEmployee();
-        String errorMsg = "error_msg";
+        String errorMsg = "To Be Continued";
         Toast.makeText(getApplicationContext(),
                 errorMsg, Toast.LENGTH_LONG).show();
-        //        Name, Toast.LENGTH_LONG).show();
 
     }
 
-    //전화연결 버튼 눌렀을 시,
     public void connectCall(View v) {
-        //TODO :처리해줘야함
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        String errorMsg = "To Be Continued";
+        Toast.makeText(getApplicationContext(),
+                errorMsg, Toast.LENGTH_LONG).show();
     }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//   서버에서 DB data 가져오는 녀석
+//   ?쒕쾭?먯꽌 DB data 媛?몄삤?????
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public class ComWithServer {
@@ -187,7 +173,7 @@ public class DeliveryMenViewActivity extends Activity {
             thread.start();
 
             try {
-                thread.join(); // thread가 종료될때 까지 기다린다.
+                thread.join(); // thread媛 醫낅즺?좊븣 源뚯? 湲곕떎由곕떎.
             } catch (Exception e) {
                 return "Communication Error";
             }
@@ -197,26 +183,19 @@ public class DeliveryMenViewActivity extends Activity {
 
 
         private class CommunicationThread extends Thread {
-            private String communicationType;
-            private ArrayList<String> params;
             private String sql;
             private String mode;
             private String serverUrl;
-            private StringBuilder output; // thread에서 나온 output
+            private StringBuilder output; // thread?먯꽌 ?섏삩 output
 
             public CommunicationThread(ArrayList<String> params) {
-                this.params = params;
-                communicationType = params.get(0);
-//            if (communicationType.equals("sql")) {
                 this.mode = params.get(1);
                 this.sql = params.get(2);
 
                 if (mode.equals("delivermen"))
                     serverUrl = "http://125.131.73.79:4002/delforyou/deliver.php";
-                    //serverUrl = "http://gyeongmo.synology.me/ojin/deliver.php";
-                else
-                    serverUrl = "http://gyeongmo.synology.me/ojin/deliver.php";
-
+                else if (mode.equals("buildingname"))
+                    serverUrl = "http://125.131.73.79:4002/delforyou/deliver.php";
                 output = new StringBuilder();
             }
 
@@ -228,21 +207,18 @@ public class DeliveryMenViewActivity extends Activity {
             public void run() {
 
                 try {
-                    // 연결 url 설정
+                    // ?곌껐 url ?ㅼ젙
                     URL url = new URL(serverUrl);
-                    // 커넥션 객체 생성
+                    // 而ㅻ꽖??媛앹껜 ?앹꽦
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    // 연결되었스면,
+                    // ?곌껐?섏뿀?ㅻ㈃,
                     if (conn != null) {
                         conn.setReadTimeout(CONNECTION_TIMEOUT);
                         conn.setConnectTimeout(CONNECTION_TIMEOUT);
                         conn.setUseCaches(false);
                         conn.setDoInput(true);
-                        // 헤더값을 설정한다.
                         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                        // 전달 방식을 설정한다. POST or GET, 기본값은 GET 이다.
                         conn.setRequestMethod("POST");
-                        // 서버로 데이터를 전송할 수 있도록 한다. GET방식이면 사용될 일이 없으나, true로 설정하면 자동으로 POST로 설정된다. 기본값은 false이다.
                         conn.setDoOutput(true);
                         conn.setDefaultUseCaches(false);
 
@@ -251,7 +227,6 @@ public class DeliveryMenViewActivity extends Activity {
                         builder.appendQueryParameter("sql", sql);
                         String query = builder.build().getEncodedQuery();
 
-                        // server에 파라미터 보내줌
                         OutputStream opstrm = conn.getOutputStream();
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(opstrm, "UTF-8"));
                         writer.write(query);
@@ -261,14 +236,13 @@ public class DeliveryMenViewActivity extends Activity {
                         opstrm.flush();
                         opstrm.close();
 
-                        //연결되었음 코드가 리턴되면,
                         if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
                             while (true) {
-                                // 웹상에 보여지는 텍스트를 라인 단위로 읽어 저장.
+                                // ?뱀긽??蹂댁뿬吏???띿뒪?몃? ?쇱씤 ?⑥쐞濡??쎌뼱 ???
                                 String line = br.readLine();
                                 if (line == null) break;
-                                // 저장된 텍스트 라인을 jsonString에 붙여 넣음
+                                // ??λ맂 ?띿뒪???쇱씤??jsonString??遺숈뿬 ?ｌ쓬
                                 output.append(line);
                             }
                             br.close();
@@ -282,3 +256,5 @@ public class DeliveryMenViewActivity extends Activity {
         }
     }
 }
+
+

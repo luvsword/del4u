@@ -2,6 +2,7 @@ package com.kaist.delforyou.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.kaist.delforyou.R;
 
 import org.json.JSONArray;
@@ -56,6 +60,11 @@ public class MainMenuActivity extends Activity {
             startActivity(intent);
         }
     };
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
 
     @Override
@@ -63,14 +72,18 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenuactivity);
 
-        fromDeliveryButton = (RadioButton)findViewById(R.id.radio0);
-        toDeliveryButton = (RadioButton)findViewById(R.id.radio1);
-        deliveryListView = (ListView)findViewById(R.id.deliveryRequestList);
+        fromDeliveryButton = (RadioButton) findViewById(R.id.radio0);
+        toDeliveryButton = (RadioButton) findViewById(R.id.radio1);
+        deliveryListView = (ListView) findViewById(R.id.deliveryRequestList);
         deliveryListView.setOnItemClickListener(listener);
 
         db = new SQLiteHandler(getApplicationContext());
         email = db.getUserDetails().get("email");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         taskPHP = new PHP_GetDeliveryRequest();
         taskPHP.execute(AppConfig.URL_GETDELIVERY);
     }
@@ -87,7 +100,7 @@ public class MainMenuActivity extends Activity {
     }
 
     public void refresh(View v) {
-    // TODO:
+        // TODO:
     }
 
     //배송조회 버튼 눌렀을 시,
@@ -100,11 +113,7 @@ public class MainMenuActivity extends Activity {
         Intent intent = new Intent(MainMenuActivity.this, ReservationActivity.class);
         startActivity(intent);
     }
-    //예약함 버튼 눌렀을 시,
-    public void reservationHistory(View v) {
-        Intent intent = new Intent(MainMenuActivity.this, ReservationHistoryActivity.class);
-        startActivity(intent);
-    }
+
     //설정 버튼 눌렀을 시,
     public void setting(View v) {
         Intent intent = new Intent(MainMenuActivity.this, SettingActivity.class);
@@ -113,7 +122,7 @@ public class MainMenuActivity extends Activity {
 
     protected void fillItemListView(HashMap<String, HashMap<String, String>> deliveries,
                                     HashMap<String, ArrayList<ListItem>> deliveryItems) {
-        ListView listView = (ListView)findViewById(R.id.deliveryRequestList);
+        ListView listView = (ListView) findViewById(R.id.deliveryRequestList);
         ListViewAdapter adapter = new ListViewAdapter();
         listView.setAdapter(adapter);
 
@@ -136,10 +145,50 @@ public class MainMenuActivity extends Activity {
             }
 
             String itemDescription = deliveryItems.get(key).get(0).getItemDescription();
-            adapter.addItems(Integer.toString(month+1) + "." + Integer.toString(day), dayOfWeek,
-                             itemDescription, deliveryInfo.get("name"), deliveryInfo.get("shipping"),
-                             deliveryInfo.get("status"));
+            adapter.addItems(Integer.toString(month + 1) + "." + Integer.toString(day), dayOfWeek,
+                    itemDescription, deliveryInfo.get("name"), deliveryInfo.get("shipping"),
+                    deliveryInfo.get("status"));
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MainMenu Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.kaist.delforyou.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "MainMenu Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.kaist.delforyou.activity/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
     }
 
     private class PHP_GetDeliveryRequest extends AsyncTask<String, Integer, String> {
@@ -148,23 +197,23 @@ public class MainMenuActivity extends Activity {
             StringBuilder jsonHtml = new StringBuilder();
             try {
                 URL url = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
 
-                String postParameters = "email="+email;
+                String postParameters = "email=" + email;
                 //Send request
-                DataOutputStream wr = new DataOutputStream (conn.getOutputStream ());
-                wr.writeBytes (postParameters);
-                wr.flush ();
-                wr.close ();
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes(postParameters);
+                wr.flush();
+                wr.close();
 
-                if (conn!=null){
+                if (conn != null) {
                     conn.setConnectTimeout(10000);
-                    Log.i("HOHO", "Response Code) "+ conn.getResponseCode());
+                    Log.i("HOHO", "Response Code) " + conn.getResponseCode());
                     //conn.setUseCaches(false);
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-                        for(;;) {
+                        for (; ; ) {
                             String line = br.readLine();
                             if (line == null) break;
                             jsonHtml.append(line + "\n");
@@ -213,7 +262,7 @@ public class MainMenuActivity extends Activity {
             }
         }
 
-        protected void onPostExecute(String str){
+        protected void onPostExecute(String str) {
             try {
                 JSONObject root = new JSONObject(str);
                 JSONObject results = root.getJSONObject("results");

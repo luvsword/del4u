@@ -80,14 +80,6 @@
                     android:onClick="reservation"
                     android:layout_weight="1"/>
             <Button
-                    android:id="@+id/reservationHistoryButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="예약함"
-                    android:textSize="15sp"
-                    android:onClick="reservationHistory"
-                    android:layout_weight="1"/>
-            <Button
                     android:id="@+id/settingButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

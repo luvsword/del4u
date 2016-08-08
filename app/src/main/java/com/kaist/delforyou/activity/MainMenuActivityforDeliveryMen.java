@@ -75,7 +75,6 @@ public class MainMenuActivityforDeliveryMen extends Activity {
 
     //작업할당 버튼 눌렀을 시,
     public void assignJob(View v) {
-        Log.i("HOHO", "Where am i ?");
         Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, AssignActivity.class);
         startActivity(intent);
     }

@@ -55,23 +55,14 @@
                 android:layout_height="match_parent"
                 android:text="배송조회"
                 android:textSize="15sp"
-                android:onClick="dliveryView"
+                android:onClick="deliveryView"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/reservationButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="작업할당"
+                android:text="배달 가져가기"
                 android:textSize="15sp"
                 android:onClick="assignJobToMe"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/reservationHistoryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="예약함"
-                android:textSize="15sp"
-                android:onClick="reservationHistory"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/settingButton"

@@ -1,13 +1,12 @@
 package com.kaist.delforyou.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
@@ -20,30 +19,44 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import com.kaist.delforyou.app.AppConfig;
+import com.kaist.delforyou.helper.SQLiteHandler;
 
 /**
  * Created by user on 2016-07-23.
  */
 public class MainMenuActivity extends Activity {
+    private String email;
+    private SQLiteHandler db;
     private PHP_GetDeliveryRequest taskPHP;
-    private HashMap<String, HashMap<String, String>> deliveryFrom = new HashMap<>();
-    private HashMap<String, HashMap<String, String>> deliveryTo = new HashMap<>();
+    private LinkedHashMap<String, HashMap<String, String>> deliveryFrom = new LinkedHashMap<>();
+    private LinkedHashMap<String, HashMap<String, String>> deliveryTo = new LinkedHashMap<>();
     private HashMap<String, ArrayList<ListItem>> deliveryFromItems = new HashMap<>();
     private HashMap<String, ArrayList<ListItem>> deliveryToItems = new HashMap<>();
     private RadioButton fromDeliveryButton;
     private RadioButton toDeliveryButton;
+    private ListView deliveryListView;
+    private AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String[] deliveryIDs = deliveryFrom.keySet().toArray(new String[0]);
+            Intent intent = new Intent(MainMenuActivity.this, DetailDeliveryActivity.class);
+            intent.putExtra("deliveryid", Integer.parseInt(deliveryIDs[position]));
+            startActivity(intent);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +65,11 @@ public class MainMenuActivity extends Activity {
 
         fromDeliveryButton = (RadioButton)findViewById(R.id.radio0);
         toDeliveryButton = (RadioButton)findViewById(R.id.radio1);
+        deliveryListView = (ListView)findViewById(R.id.deliveryRequestList);
+        deliveryListView.setOnItemClickListener(listener);
+
+        db = new SQLiteHandler(getApplicationContext());
+        email = db.getUserDetails().get("email");
 
         taskPHP = new PHP_GetDeliveryRequest();
         taskPHP.execute(AppConfig.URL_GETDELIVERY);
@@ -68,33 +86,12 @@ public class MainMenuActivity extends Activity {
         toDeliveryButton.toggle();
     }
 
-    //정렬 버튼 눌렀을 시,
-    public void sort(View v) {
-    // TODO:사람이름 or 날짜 순으로 정렬해야함
-    }
-
-    // TODO: EditTextView에 DB에서 각각의 배송내역들 읽어와서 내용보여줘야함
-
-    // 'TextView1 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView1(View v) {
-        Intent intent = new Intent(MainMenuActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView2 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView2(View v) {
-        Intent intent = new Intent(MainMenuActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView3 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView3(View v) {
-        Intent intent = new Intent(MainMenuActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
+    public void refresh(View v) {
+    // TODO:
     }
 
     //배송조회 버튼 눌렀을 시,
-    public void dliveryView(View v) {
+    public void deliveryView(View v) {
 
     }
 
@@ -116,10 +113,8 @@ public class MainMenuActivity extends Activity {
 
     protected void fillItemListView(HashMap<String, HashMap<String, String>> deliveries,
                                     HashMap<String, ArrayList<ListItem>> deliveryItems) {
-        ListView listView;
+        ListView listView = (ListView)findViewById(R.id.deliveryRequestList);
         ListViewAdapter adapter = new ListViewAdapter();
-
-        listView = (ListView)findViewById(R.id.deliveryRequestList);
         listView.setAdapter(adapter);
 
         for (String key : deliveries.keySet()) {
@@ -155,17 +150,12 @@ public class MainMenuActivity extends Activity {
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
                 conn.setRequestMethod("POST");
 
-                String postParameters = "email=delforyou@kaist.ac.kr";
+                String postParameters = "email="+email;
                 //Send request
                 DataOutputStream wr = new DataOutputStream (conn.getOutputStream ());
                 wr.writeBytes (postParameters);
                 wr.flush ();
                 wr.close ();
-
-                //conn.setFixedLengthStreamingMode(postParameters.getBytes().length);
-                //PrintWriter out = new PrintWriter(conn.getOutputStream());
-                //out.print(postParameters);
-                //out.close();
 
                 if (conn!=null){
                     conn.setConnectTimeout(10000);
@@ -187,16 +177,17 @@ public class MainMenuActivity extends Activity {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            return
-                    jsonHtml.toString();
+            return jsonHtml.toString();
         }
 
         private void fillItemArray(JSONArray delivery, HashMap<String, HashMap<String, String>> deliveries,
                                    HashMap<String, ArrayList<ListItem>> deliveryItems) {
             try {
+                JSONObject jo0 = delivery.getJSONObject(0);
+                Log.i("HOHO", "Before loop) " + jo0.toString());
+
                 for (int index = 0; index < delivery.length(); index++) {
                     JSONObject jo = delivery.getJSONObject(index);
-                    Log.i("HOHO", "Inside loop) " + jo.toString());
                     if (deliveries.containsKey(jo.getString("id"))) {
                         ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
                                 jo.getString("description"), jo.getString("category"));

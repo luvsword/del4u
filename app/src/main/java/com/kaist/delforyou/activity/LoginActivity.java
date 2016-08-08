@@ -53,10 +53,7 @@ public class LoginActivity extends Activity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
-
-        // Session manager
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not

@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.kaist.delforyou.R;
+import com.kaist.delforyou.helper.SQLiteHandler;
+import com.kaist.delforyou.helper.SessionManager;
 
 /**
  * Created by user on 2016-07-23.
@@ -15,10 +17,20 @@ import com.kaist.delforyou.R;
 public class SettingActivity extends PreferenceActivity {
 
     Button modifyInformation;
+    Button logoutButton;
+    private SQLiteHandler db;
+    private SessionManager session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.setting);
+
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // session manager
+        session = new SessionManager(getApplicationContext());
 
         //'내 정보수정' 버튼 클릭시
         ListView v = getListView();
@@ -30,6 +42,22 @@ public class SettingActivity extends PreferenceActivity {
                 Intent i = new Intent(getApplicationContext(),
                         ModefySignInfoActivity.class);
                 startActivity(i);
+            }
+        });
+
+        logoutButton = new Button(this);
+        v.addFooterView(logoutButton);
+        logoutButton.setText("로그 아웃");
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                session.setLogin(false);
+
+                db.deleteUsers();
+
+                // Launching the login activity
+                Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

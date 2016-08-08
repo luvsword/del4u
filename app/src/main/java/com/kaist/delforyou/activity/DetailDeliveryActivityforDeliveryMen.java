@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.kaist.delforyou.R;
 import com.kaist.delforyou.app.AppConfig;
 import com.kaist.delforyou.helper.DatabaseAsynTask;
+import com.kaist.delforyou.helper.SQLiteHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +27,8 @@ public class DetailDeliveryActivityforDeliveryMen extends Activity {
     private static final String TAG = DetailDeliveryActivityforDeliveryMen.class.getSimpleName();
     private int deliveryId;
     private DetailDeliveryInfo DeliveryInfo;
+    private String deliveryMenEmail;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,12 @@ public class DetailDeliveryActivityforDeliveryMen extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             deliveryId = intent.getIntExtra("deliveryid", 0);
+            deliveryMenEmail = intent.getStringExtra("ownerEmail");
             Log.d(TAG, "deliveryId = " + deliveryId);
         }
+
+        db = new SQLiteHandler(getApplicationContext());
+        deliveryMenEmail = db.getUserDetails().get("email");
 
         DeliveryInfo.deliveryId = deliveryId;
         DeliveryInfo.getJSONData(info);
@@ -71,6 +79,9 @@ public class DetailDeliveryActivityforDeliveryMen extends Activity {
     void populateStatusLog(){
         String rest = null;
         JSONObject info = new JSONObject();
+
+        Button btnPickup = (Button) findViewById(R.id.btnConfirmPickup);
+        Button btnShipping = (Button) findViewById(R.id.btnConfirmShipping);
 
         TextView textStatuslog1 = (TextView) findViewById(R.id.Dstatuslog1);
         TextView textStatuslog2 = (TextView) findViewById(R.id.Dstatuslog2);
@@ -105,15 +116,16 @@ public class DetailDeliveryActivityforDeliveryMen extends Activity {
                 if (index == 0) {
                     textStatuslog1.setText(time);
                 } else if (index == 1) {
+                    btnPickup.setEnabled(false);
                     textStatuslog2.setText(time);
                 } else if (index == 2) {
+                    btnShipping.setEnabled(false);
                     textStatuslog3.setText(time);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -156,4 +168,77 @@ public class DetailDeliveryActivityforDeliveryMen extends Activity {
         startActivity(intent);
     }
 
+    public void confirmShipping(View v) {
+        String rest = null;
+        JSONObject info = new JSONObject();
+        Button btnShipping = (Button) findViewById(R.id.btnConfirmShipping);
+
+        try {
+            info.put("connectType", "setstatusinfo");
+            info.put("serverInfo", AppConfig.URL_SETSTATUSINFO);
+            info.put("deliveryid", deliveryId);
+            info.put("owner", deliveryMenEmail);
+            info.put("status", "003");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        DatabaseAsynTask dbcon = new DatabaseAsynTask();
+        try {
+            rest = dbcon.execute(info).get();
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+
+        try {
+            JSONObject root = new JSONObject(rest);
+            JSONObject result = root.getJSONObject("result");
+            String time = result.getString("time");
+            TextView textStatuslog3 = (TextView) findViewById(R.id.Dstatuslog3);
+            textStatuslog3.setText(time);
+            btnShipping.setEnabled(false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void confirmPickup(View v) {
+        String rest = null;
+        JSONObject info = new JSONObject();
+        Button btnPickup = (Button) findViewById(R.id.btnConfirmPickup);
+
+        try {
+            info.put("connectType", "setstatusinfo");
+            info.put("serverInfo", AppConfig.URL_SETSTATUSINFO);
+            info.put("deliveryid", deliveryId);
+            info.put("owner", deliveryMenEmail);
+            info.put("status", "002");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        DatabaseAsynTask dbcon = new DatabaseAsynTask();
+        try {
+            rest = dbcon.execute(info).get();
+        } catch (InterruptedException e) {
+            return;
+        } catch (ExecutionException e) {
+            return;
+        }
+
+        try {
+            JSONObject root = new JSONObject(rest);
+            JSONObject result = root.getJSONObject("result");
+            String time = result.getString("time");
+            TextView textStatuslog2 = (TextView) findViewById(R.id.Dstatuslog2);
+            textStatuslog2.setText(time);
+            btnPickup.setEnabled(false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

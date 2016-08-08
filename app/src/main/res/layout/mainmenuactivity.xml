@@ -17,32 +17,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/sendDliveryButton"
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="보낸 택배"
-                android:textSize="15sp"
-                android:layout_weight="3"
-                android:onClick="sendDlivery"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:layout_weight="5">
+                <RadioButton
+                    android:id="@+id/radio0"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="보낸 물건"
+                    android:checked="true"
+                    android:onClick="sendDelivery"/>
+                <RadioButton
+                    android:id="@+id/radio1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="받을 물건"
+                    android:paddingLeft="10dp"
+                    android:onClick="receiveDelivery"/>
+            </RadioGroup>
             <Button
-                android:id="@+id/receiveDliveryButton"
+                android:id="@+id/refreshButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:text="받는 택배"
-                android:textSize="15sp"
-                android:layout_weight="3"
-                android:onClick="receiveDlivery"/>
-            <Button
-                android:id="@+id/sortButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:text="정렬"
+                android:text="갱신"
                 android:textSize="15sp"
                 android:layout_weight="1"
-                android:onClick="sort"/>
+                android:onClick="refresh"/>
         </LinearLayout>
     </RelativeLayout>
     <!-- Footer aligned to bottom -->
@@ -98,12 +105,15 @@
         android:layout_height="fill_parent"
         android:layout_above="@id/footer"
         android:layout_below="@id/header"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="@android:color/transparent">
         <ListView
             android:id="@+id/deliveryRequestList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:listSelector="@android:color/transparent">
+            android:listSelector="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp">
         </ListView>
     </ScrollView>
 </RelativeLayout>

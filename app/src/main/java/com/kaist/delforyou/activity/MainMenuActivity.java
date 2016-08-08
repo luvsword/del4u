@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 
 import com.kaist.delforyou.R;
 
@@ -36,28 +37,35 @@ import com.kaist.delforyou.app.AppConfig;
  * Created by user on 2016-07-23.
  */
 public class MainMenuActivity extends Activity {
-    private ListView deliveryList;
-    PHP_GetDeliveryRequest taskPHP;
-    HashMap<String, HashMap<String, String>> deliveries = new HashMap<>();
-    HashMap<String, ArrayList<ListItem>> deliveryItems = new HashMap<>();
+    private PHP_GetDeliveryRequest taskPHP;
+    private HashMap<String, HashMap<String, String>> deliveryFrom = new HashMap<>();
+    private HashMap<String, HashMap<String, String>> deliveryTo = new HashMap<>();
+    private HashMap<String, ArrayList<ListItem>> deliveryFromItems = new HashMap<>();
+    private HashMap<String, ArrayList<ListItem>> deliveryToItems = new HashMap<>();
+    private RadioButton fromDeliveryButton;
+    private RadioButton toDeliveryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenuactivity);
 
+        fromDeliveryButton = (RadioButton)findViewById(R.id.radio0);
+        toDeliveryButton = (RadioButton)findViewById(R.id.radio1);
+
         taskPHP = new PHP_GetDeliveryRequest();
         taskPHP.execute(AppConfig.URL_GETDELIVERY);
     }
 
-    //보낸택배 버튼 눌렀을 시,
-    public void sendDlivery(View v) {
-    // TODO: 보낸 택배 목록만 보여줘야함
+    public void sendDelivery(View v) {
+        fillItemListView(deliveryFrom, deliveryFromItems);
+        fromDeliveryButton.toggle();
     }
 
     //받는택배 버튼 눌렀을 시,
-    public void receiveDlivery(View v) {
-    // TODO: 받는 택배 목록만 보여줘야함
+    public void receiveDelivery(View v) {
+        fillItemListView(deliveryTo, deliveryToItems);
+        toDeliveryButton.toggle();
     }
 
     //정렬 버튼 눌렀을 시,
@@ -85,11 +93,6 @@ public class MainMenuActivity extends Activity {
         startActivity(intent);
     }
 
-    // '배송내역 더보기' 버튼 눌렀을 시,
-    public void moreDeliveryVeiw(View v) {
-    // TODO: 배송 내역 더 보여줘야함
-    }
-
     //배송조회 버튼 눌렀을 시,
     public void dliveryView(View v) {
 
@@ -111,40 +114,35 @@ public class MainMenuActivity extends Activity {
         startActivity(intent);
     }
 
-    protected void fillItemList() {
+    protected void fillItemListView(HashMap<String, HashMap<String, String>> deliveries,
+                                    HashMap<String, ArrayList<ListItem>> deliveryItems) {
         ListView listView;
         ListViewAdapter adapter = new ListViewAdapter();
 
         listView = (ListView)findViewById(R.id.deliveryRequestList);
         listView.setAdapter(adapter);
 
-        Log.i("HOHO", "After setAdapter..");
         for (String key : deliveries.keySet()) {
             HashMap<String, String> deliveryInfo = deliveries.get(key);
             SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date;
             int month = 0;
             int day = 0;
-            int dayOfWeek = 0;
-            String[] namesOfDays = DateFormatSymbols.getInstance().getShortWeekdays();
-            Log.i("HOHO", "here ?");
+            String dayOfWeek = "";
             try {
                 date = transFormat.parse(deliveryInfo.get("time"));
-                Log.i("HOHO", "Or, here ?");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date);
-                Log.i("HOHO", "XXXXXXXXXXX?");
                 month = cal.get(Calendar.MONTH);
                 day = cal.get(Calendar.DAY_OF_MONTH);
-                dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                dayOfWeek = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, getResources().getConfiguration().locale);
             } catch (ParseException e) {
                 // TODO::
             }
 
             String itemDescription = deliveryItems.get(key).get(0).getItemDescription();
-            adapter.addItems(Integer.toString(month+1) + "." + Integer.toString(day),
-                             namesOfDays[dayOfWeek], itemDescription,
-                             deliveryInfo.get("name"), deliveryInfo.get("shipping"));
+            adapter.addItems(Integer.toString(month+1) + "." + Integer.toString(day), dayOfWeek,
+                             itemDescription, deliveryInfo.get("name"), deliveryInfo.get("shipping"));
         }
     }
 
@@ -192,14 +190,11 @@ public class MainMenuActivity extends Activity {
             return
                     jsonHtml.toString();
         }
-        protected void onPostExecute(String str){
-            try {
-                JSONObject root = new JSONObject(str);
-                JSONObject results = root.getJSONObject("results");
-                JSONArray delivery = results.getJSONArray("delivery");
-                Log.i("HOHO", "delivery item count) " + delivery.length());
 
-                for (int index=0; index<delivery.length(); index++){
+        private void fillItemArray(JSONArray delivery, HashMap<String, HashMap<String, String>> deliveries,
+                                   HashMap<String, ArrayList<ListItem>> deliveryItems) {
+            try {
+                for (int index = 0; index < delivery.length(); index++) {
                     JSONObject jo = delivery.getJSONObject(index);
                     Log.i("HOHO", "Inside loop) " + jo.toString());
                     if (deliveries.containsKey(jo.getString("id"))) {
@@ -214,15 +209,28 @@ public class MainMenuActivity extends Activity {
                         deliveries.put(jo.getString("id"), list);
 
                         ArrayList<ListItem> items = new ArrayList<>();
-                        //ListItem it = new ListItem("haha", "hoho", "abc", "XYZ", "KK");
                         ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
-                                           jo.getString("description"), jo.getString("category"));
+                                jo.getString("description"), jo.getString("category"));
                         items.add(it);
                         deliveryItems.put(jo.getString("id"), items);
                     }
                 }
-                Log.i("HOHO", "You see here?");
-                fillItemList();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        protected void onPostExecute(String str){
+            try {
+                JSONObject root = new JSONObject(str);
+                JSONObject results = root.getJSONObject("results");
+                JSONArray from = results.getJSONArray("from");
+                JSONArray to = results.getJSONArray("to");
+
+                fillItemArray(from, deliveryFrom, deliveryFromItems);
+                fillItemArray(to, deliveryTo, deliveryToItems);
+
+                fillItemListView(deliveryFrom, deliveryFromItems);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

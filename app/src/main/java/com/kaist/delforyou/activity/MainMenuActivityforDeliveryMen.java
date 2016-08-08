@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kaist.delforyou.R;
@@ -38,11 +39,28 @@ public class MainMenuActivityforDeliveryMen extends Activity {
     private SQLiteHandler db;
     private PHP_GetDeliveryJobs taskPHP;
     private LinkedHashMap<String, HashMap<String, String>> deliveryJobs = new LinkedHashMap<>();
+    private ListView deliveryJobListView;
+    private AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String[] deliveryIDs = deliveryJobs.keySet().toArray(new String[0]);
+            String deliveryID = deliveryIDs[position];
+            Log.i("HOHO", "Before owneremail. position) " + position);
+            String owneremail = deliveryJobs.get(deliveryID).get("owner");
+            Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivityforDeliveryMen.class);
+            intent.putExtra("deliveryid", Integer.parseInt(deliveryID));
+            intent.putExtra("ownerEmail", owneremail);
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmenuactivityfordeliverymen);
+
+        deliveryJobListView = (ListView)findViewById(R.id.deliveryJobList);
+        deliveryJobListView.setOnItemClickListener(listener);
 
         db = new SQLiteHandler(getApplicationContext());
         email = db.getUserDetails().get("email");
@@ -155,6 +173,7 @@ public class MainMenuActivityforDeliveryMen extends Activity {
                     list.put("time", jo.getString("time"));
                     list.put("status", jo.getString("status"));
                     list.put("item", jo.getString("item"));
+                    list.put("owner", jo.getString("sender"));
                     deliveryJobs.put(jo.getString("id"), list);
                 }
                 fillItemListView();

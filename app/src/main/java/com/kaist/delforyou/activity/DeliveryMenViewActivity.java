@@ -6,6 +6,7 @@ package com.kaist.delforyou.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +18,9 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 
-
-
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.kaist.delforyou.R;
 import com.kaist.delforyou.helper.SQLiteHandler;
 import com.kaist.delforyou.helper.SessionManager;
@@ -36,8 +38,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.io.ByteArrayInputStream;
-
-
 
 
 /**
@@ -61,14 +61,19 @@ public class DeliveryMenViewActivity extends Activity {
     String buildingname;
     String description;
     TextView textView;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
 
-    public void loadEmployee() {
+    public void loadEmployee(String email) {
 
         ComWithServer cws = new ComWithServer(context); // ?쒕쾭? ?듭떊?섎뒗 Class
 //        String sql = "select" + getinfoDB + "from employee where email =  " + '"' + email_id + '"' + ";" ;
-        String sql = "select workplace, lastname, firstname, divisionid, phoneno, employeeid from employee where email = " + '"' + email_id + '"' + ";";
-
+//        String sql = "select workplace, lastname, firstname, divisionid, phoneno, employeeid from employee where email = " + '"' + email_id + '"' + ";";
+        String sql = "select workplace, lastname, firstname, divisionid, phoneno, employeeid from employee where email = " + '"' + email + '"' + ";";
 
 
         String employee = cws.communicationTask(sql, "delivermen");
@@ -126,15 +131,23 @@ public class DeliveryMenViewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deliverymenview);
+
+        Intent i = getIntent();
+        String email = i.getStringExtra("email");
+
         context = getApplicationContext();
 
-        loadEmployee();
-        view_info = "\n" + "\n" + "\n" + description + "\n" +  "\n" + buildingname + "\n" + "\n" + lastname + firstname + "\n" +"\n" + phoneno   ;
+        loadEmployee(email);
+
+        view_info = "\n" + "\n" + "\n" + description + "\n" + "\n" + buildingname + "\n" + "\n" + lastname + firstname + "\n" + "\n" + phoneno;
         textView = (TextView) findViewById(R.id.mn_email);
         textView.setText(view_info);
         textView.setTextSize(15);
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -150,6 +163,7 @@ public class DeliveryMenViewActivity extends Activity {
         Toast.makeText(getApplicationContext(),
                 errorMsg, Toast.LENGTH_LONG).show();
     }
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,6 +208,7 @@ public class DeliveryMenViewActivity extends Activity {
 
                 if (mode.equals("delivermen"))
                     serverUrl = "http://125.131.73.79:4002/delforyou/deliver.php";
+                    //serverUrl = "http://gyeongmo.synology.me/ojin/deliver.php";
                 else if (mode.equals("buildingname"))
                     serverUrl = "http://125.131.73.79:4002/delforyou/deliver.php";
                 output = new StringBuilder();

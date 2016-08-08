@@ -41,8 +41,22 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/status"
+            android:id="@+id/shippingLocation"
             android:textSize="16dp"
             android:layout_weight="1" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/deliveryStatus"
+            android:gravity="center_vertical|right"
+            android:textSize="24dp" />
     </LinearLayout>
 </LinearLayout>

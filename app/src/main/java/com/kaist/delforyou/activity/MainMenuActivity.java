@@ -137,7 +137,8 @@ public class MainMenuActivity extends Activity {
 
             String itemDescription = deliveryItems.get(key).get(0).getItemDescription();
             adapter.addItems(Integer.toString(month+1) + "." + Integer.toString(day), dayOfWeek,
-                             itemDescription, deliveryInfo.get("name"), deliveryInfo.get("shipping"));
+                             itemDescription, deliveryInfo.get("name"), deliveryInfo.get("shipping"),
+                             deliveryInfo.get("status"));
         }
     }
 
@@ -190,18 +191,19 @@ public class MainMenuActivity extends Activity {
                     JSONObject jo = delivery.getJSONObject(index);
                     if (deliveries.containsKey(jo.getString("id"))) {
                         ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
-                                jo.getString("description"), jo.getString("category"));
+                                jo.getString("status"), jo.getString("category"), "");
                         deliveryItems.get(jo.getString("id")).add(it);
                     } else {
                         HashMap<String, String> list = new HashMap<>();
                         list.put("name", jo.getString("name"));
                         list.put("shipping", jo.getString("shipping"));
                         list.put("time", jo.getString("time"));
+                        list.put("status", jo.getString("status"));
                         deliveries.put(jo.getString("id"), list);
 
                         ArrayList<ListItem> items = new ArrayList<>();
                         ListItem it = new ListItem(jo.getString("time"), "Thuesday", jo.getString("item"),
-                                jo.getString("description"), jo.getString("category"));
+                                jo.getString("status"), jo.getString("category"), "");
                         items.add(it);
                         deliveryItems.put(jo.getString("id"), items);
                     }

@@ -8,14 +8,16 @@ public class ListItem {
     private String dayOfWeek;
     private String itemDescription;
     private String personInfo;
-    private String status;
+    private String deliveryStatus;
+    private String shippingLocation;
 
-    public ListItem(String date, String dayOfWeek, String itemDescription, String personInfo, String status) {
+    public ListItem(String date, String dayOfWeek, String itemDescription, String personInfo, String location, String status) {
         this.date = date;
         this.dayOfWeek = dayOfWeek;
         this.itemDescription = itemDescription;
         this.personInfo = personInfo;
-        this.status = status;
+        this.shippingLocation = location;
+        this.deliveryStatus = status;
     }
 
     public String getDate() {
@@ -30,7 +32,6 @@ public class ListItem {
     public String getPersonInfo(){
         return this.personInfo;
     }
-    public String getStatus(){
-        return this.status;
-    }
+    public String getShippingLocation() {return this.shippingLocation;}
+    public String getDeliveryStatus(){return this.deliveryStatus;}
 }

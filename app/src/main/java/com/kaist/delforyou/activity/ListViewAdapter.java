@@ -49,7 +49,8 @@ public class ListViewAdapter extends BaseAdapter{
         TextView dayOfWeek = (TextView) convertView.findViewById(R.id.dayOfWeek);
         TextView itemDescription = (TextView) convertView.findViewById(R.id.itemDescription);
         TextView personInfo = (TextView) convertView.findViewById(R.id.personInfo);
-        TextView status = (TextView) convertView.findViewById(R.id.status);
+        TextView shippingLocation = (TextView) convertView.findViewById(R.id.shippingLocation);
+        TextView deliveryStatus = (TextView) convertView.findViewById(R.id.deliveryStatus);
 
         ListItem listItem = itemList.get(position);
 
@@ -57,13 +58,14 @@ public class ListViewAdapter extends BaseAdapter{
         dayOfWeek.setText(listItem.getDayOfWeek());
         itemDescription.setText(listItem.getItemDescription());
         personInfo.setText(listItem.getPersonInfo());
-        status.setText(listItem.getStatus());
+        shippingLocation.setText(listItem.getShippingLocation());
+        deliveryStatus.setText(listItem.getDeliveryStatus());
 
         return convertView;
     }
 
-    public void addItems(String date, String dayOfWeek, String itemDescription, String personInfo, String status) {
-        ListItem item = new ListItem(date, dayOfWeek, itemDescription, personInfo, status);
+    public void addItems(String date, String dayOfWeek, String itemDescription, String personInfo, String location, String status) {
+        ListItem item = new ListItem(date, dayOfWeek, itemDescription, personInfo, location, status);
         itemList.add(item);
     }
 }

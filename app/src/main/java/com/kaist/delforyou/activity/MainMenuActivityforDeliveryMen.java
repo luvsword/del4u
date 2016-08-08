@@ -17,43 +17,13 @@ public class MainMenuActivityforDeliveryMen extends Activity {
         setContentView(R.layout.mainmenuactivityfordeliverymen);
     }
 
-    //정렬 버튼 눌렀을 시,
-    public void sort(View v) {
-        // TODO:사람이름 or 날짜 순으로 정렬해야함
-    }
-
-    // TODO: EditTextView에 DB에서 각각의 배송내역들 읽어와서 내용보여줘야함
-
-    // 'TextView1 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView1(View v) {
-        Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView2 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView2(View v) {
-        Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView3 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView3(View v) {
-        Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // '배송내역 더보기' 버튼 눌렀을 시,
-    public void moreDeliveryVeiw(View v) {
-        // TODO: 배송 내역 더 보여줘야함
-    }
-
     //배송조회 버튼 눌렀을 시,
-    public void dliveryView(View v) {
+    public void deliveryView(View v) {
 
     }
 
     //작업할당 버튼 눌렀을 시,
-    public void assign(View v) {
+    public void assignJob(View v) {
         Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, AssignActivity.class);
         startActivity(intent);
     }

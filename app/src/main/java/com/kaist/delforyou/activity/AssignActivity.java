@@ -17,34 +17,9 @@ public class AssignActivity extends Activity {
         setContentView(R.layout.assign);
     }
 
-    //정렬 버튼 눌렀을 시,
-    public void sort(View v) {
-        // TODO:사람이름 or 날짜 순으로 정렬해야함
-    }
-
     //업데이트 버튼 눌렀을 시,
     public void updateDelivery(View v) {
         // TODO:
-    }
-
-    // TODO: EditTextView에 DB에서 각각의 배송내역들 읽어와서 내용보여줘야함
-
-    // 'TextView1 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView1(View v) {
-        Intent intent = new Intent(AssignActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView2 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView2(View v) {
-        Intent intent = new Intent(AssignActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
-    }
-
-    // 'TextView3 배송내역 더보기' 버튼 눌렀을 시,
-    public void TextView3(View v) {
-        Intent intent = new Intent(AssignActivity.this, DetailDeliveryActivity.class);
-        startActivity(intent);
     }
 
     // '배송예약내역 더보기' 버튼 눌렀을 시,
@@ -53,12 +28,11 @@ public class AssignActivity extends Activity {
     }
 
     //배송조회 버튼 눌렀을 시,
-    public void dliveryView(View v) {
+    public void deliveryView(View v) {
         Intent intent = new Intent(AssignActivity.this, MainMenuActivityforDeliveryMen.class);
         startActivity(intent);
     }
 
-    //작업할당 버튼 눌렀을 시,
     public void assign(View v) {
 
     }

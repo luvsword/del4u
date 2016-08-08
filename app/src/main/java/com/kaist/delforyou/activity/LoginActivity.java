@@ -39,12 +39,14 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+    private String jobposition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        HashMap<String, String> user;
         inputEmail = (EditText) findViewById(R.id.emailInput);
         inputPassword = (EditText) findViewById(R.id.passwordInput);
         btnLogin = (Button) findViewById(R.id.loginButton);
@@ -53,15 +55,25 @@ public class LoginActivity extends Activity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
+        // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
+        user = db.getUserDetails();
+        jobposition = user.get("jobposition");
+        // Session manager
         session = new SessionManager(getApplicationContext());
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if (jobposition.equals("000")) {
+                Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(LoginActivity.this, MainMenuActivityforDeliveryMen.class);
+                startActivity(intent);
+                finish();
+            }
         }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

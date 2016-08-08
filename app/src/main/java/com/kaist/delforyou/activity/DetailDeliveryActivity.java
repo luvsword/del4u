@@ -26,6 +26,7 @@ public class DetailDeliveryActivity extends Activity {
     private static final String TAG = DetailDeliveryActivity.class.getSimpleName();
     private int deliveryId;
     private DetailDeliveryInfo DeliveryInfo;
+    private String ownerEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +102,7 @@ public class DetailDeliveryActivity extends Activity {
                 String time;
                 info = statusLog.getJSONObject(index);
                 time = info.getString("time");
+                ownerEmail = info.getString("owner");
                 Log.d(TAG, "info = " + info.getString("statusdesc") +info.getString("time") );
                 if (index == 0) {
                     textStatuslog1.setText(time);
@@ -146,6 +148,7 @@ public class DetailDeliveryActivity extends Activity {
     //  배달원 정보 조회 버튼 눌렀을 시,
     public void deliveryMenView(View v) {
         Intent intent = new Intent(DetailDeliveryActivity.this, DeliveryMenViewActivity.class);
+        intent.putExtra("email", ownerEmail);
         startActivity(intent);
     }
 

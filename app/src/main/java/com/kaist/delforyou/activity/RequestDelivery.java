@@ -35,13 +35,8 @@ public class RequestDelivery  {
 
     public ArrayList<DeliveryItem> itemList;
 
-    public RequestDelivery() {}
-
-    public class DeliveryItem {
-        public String categoryId;
-        public String description;
-        public int count;
-        public String dimension;
+    public RequestDelivery() {
+        itemList = new ArrayList<DeliveryItem>();
     }
 
     public String getDateTimeformat(int year, int month, int day, int hour, int minutes) {

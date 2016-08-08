@@ -78,7 +78,7 @@ public class SignupActivity extends Activity {
         setContentView(R.layout.signup);
 
         taskPHP = new PHP_GetCompnayInfo();
-        taskPHP.execute("http://125.131.73.146/company_info.php");
+        taskPHP.execute(AppConfig.URL_GETCATINFO1);
 
         inputFname = (EditText) findViewById(R.id.fname);
         inputLname = (EditText) findViewById(R.id.lname);

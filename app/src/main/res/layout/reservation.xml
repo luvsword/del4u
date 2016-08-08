@@ -165,6 +165,21 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="30dp">
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:text="배송 메세지 :"
+                    android:textSize="13sp"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:id="@+id/request_msg"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_margin="15dp">
@@ -310,91 +325,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_margin="15dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:text="상품 정보"
                     android:textSize="20sp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp">
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="130dp"
+                    android:onClick="addProductCancle"
+                    android:background="@color/common_action_bar_splitter"/>
 
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="물품명 :"
-                        android:textSize="13sp"/>
-                    <EditText
-                        android:layout_width="200dp"
-                        android:layout_height="50dp"
-                        android:hint="" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="물품 종류 :"
-                        android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="수량 :"
-                        android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="부피 :"
-                        android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="30dp">
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="50dp"
-                        android:text="배송 메세지 :"
-                        android:textSize="13sp"/>
-                    <Button
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:background="@color/common_action_bar_splitter"/>
-                </LinearLayout>
+                <Button
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:onClick="addProductConfirm"
+                    android:background="@color/common_action_bar_splitter"/>
+
             </LinearLayout>
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/common_action_bar_splitter"
+                android:id="@+id/list">
+
+            </ListView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginLeft="30dp">
+                android:layout_marginLeft="15dp">
                 <Button
                     android:id="@+id/reservationCancelButton"
                     android:layout_width="130dp"

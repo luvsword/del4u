@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.kaist.delforyou.R;
@@ -26,6 +27,7 @@ public class DetailDeliveryActivity extends Activity {
     private static final String TAG = DetailDeliveryActivity.class.getSimpleName();
     private int deliveryId;
     private DetailDeliveryInfo DeliveryInfo;
+    private String ownerEmail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,9 @@ public class DetailDeliveryActivity extends Activity {
         DeliveryInfo.itemList = new ArrayList<String>();
         DatabaseAsynTask dbcon = new DatabaseAsynTask();
 
+        Button btn2 = (Button) findViewById(R.id.deliveryMenViewButton2);
+
+        btn2.setEnabled(false);
         Intent intent = getIntent();
         if (intent != null) {
             deliveryId = intent.getIntExtra("deliveryid", 0);
@@ -71,7 +76,7 @@ public class DetailDeliveryActivity extends Activity {
     void populateStatusLog(){
         String rest = null;
         JSONObject info = new JSONObject();
-
+        Button btn2 = (Button) findViewById(R.id.deliveryMenViewButton2);
         TextView textStatuslog1 = (TextView) findViewById(R.id.statuslog1);
         TextView textStatuslog2 = (TextView) findViewById(R.id.statuslog2);
         TextView textStatuslog3 = (TextView) findViewById(R.id.statuslog3);
@@ -101,12 +106,15 @@ public class DetailDeliveryActivity extends Activity {
                 String time;
                 info = statusLog.getJSONObject(index);
                 time = info.getString("time");
+                ownerEmail = info.getString("owner");
                 Log.d(TAG, "info = " + info.getString("statusdesc") +info.getString("time") );
                 if (index == 0) {
                     textStatuslog1.setText(time);
                 } else if (index == 1) {
+                    btn2.setEnabled(true);
                     textStatuslog2.setText(time);
                 } else if (index == 2) {
+                    btn2.setEnabled(true);
                     textStatuslog3.setText(time);
                 }
             }
@@ -146,7 +154,7 @@ public class DetailDeliveryActivity extends Activity {
     //  배달원 정보 조회 버튼 눌렀을 시,
     public void deliveryMenView(View v) {
         Intent intent = new Intent(DetailDeliveryActivity.this, DeliveryMenViewActivity.class);
+        intent.putExtra("email", ownerEmail);
         startActivity(intent);
     }
-
 }

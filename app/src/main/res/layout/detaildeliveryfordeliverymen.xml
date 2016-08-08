@@ -212,46 +212,65 @@
             android:layout_marginLeft="20dp"
             android:text="요청 중"
             android:background="@color/common_action_bar_splitter"/>
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:text="완료"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:onClick="confirmPickup"
+            android:layout_marginLeft="10dp"
+            android:background="@color/common_action_bar_splitter"
+            android:id="@+id/btnConfirmPickup" />
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp">
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:id="@+id/Dstatuslog2"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
             android:text="배달 중"
             android:background="@color/common_action_bar_splitter"/>
 
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:text="완료"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:onClick="confirmShipping"
+            android:layout_marginLeft="10dp"
+            android:background="@color/common_action_bar_splitter"
+            android:id="@+id/btnConfirmShipping" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp">
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:id="@+id/Dstatuslog3"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
             android:text="배송 완료"
             android:background="@color/common_action_bar_splitter"/>
+
 
     </LinearLayout>
 </LinearLayout>

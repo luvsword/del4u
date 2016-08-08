@@ -11,6 +11,7 @@ import android.app.TimePickerDialog;
 import android.app.Dialog;
 import android.view.Menu;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TimePicker;
 import android.content.Intent;
 import android.os.Bundle;
@@ -88,13 +89,15 @@ public class ReservationActivity extends Activity {
     private Spinner receiverSpinnerCompany;
     private Spinner receiverSpinnerDivision;
     private Spinner receiverSpinnerBuilding;
-
+    private ListView list;
     private String receiverCompanyId;
     private String receiverDivisionId;
     private String receiverBuildingId;
     private RequestDelivery RDObject;
 
     private Category comInfo;
+    ArrayAdapter<String> productArrayAdapter;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -114,7 +117,7 @@ public class ReservationActivity extends Activity {
         db = new SQLiteHandler(getApplicationContext());
 
         RDObject = new RequestDelivery();
-        RDObject.itemList = new ArrayList<RequestDelivery.DeliveryItem>();
+//        RDObject.itemList = new ArrayList<DeliveryItem>();
         comInfo = new Category();
 
         comInfo.groups = new HashMap<>();
@@ -122,6 +125,7 @@ public class ReservationActivity extends Activity {
         comInfo.divisions = new HashMap<>();
         comInfo.buildings = new HashMap<>();
 
+        productArrayAdapter = new ArrayAdapter<String>(getApplication(), android.R.layout.simple_list_item_1);
         if (getComInfoList()) {
             Log.d(TAG, "GET Com Info List");
         } else {
@@ -567,36 +571,30 @@ public class ReservationActivity extends Activity {
     public void reservationConfirm(View v) {
 
         String res = null;
+        boolean status = true;
+
         JSONObject tjson = new JSONObject();
         DatabaseAsynTask dbCon = new DatabaseAsynTask();
-
-        RDObject.itemList.clear();
 
         TextView textInfo = (TextView) findViewById(R.id.receiver_email);
         RDObject.recipientEmail = textInfo.getText().toString();
 
         RDObject.senderEmail = email;
 
+        textInfo = (TextView)findViewById(R.id.request_msg);
+
+        if (textInfo.getText().toString().isEmpty()) {
+            Log.d(TAG, "requestmsg is empty");
+            RDObject.requestMessage = " ";
+        } else {
+            RDObject.requestMessage = textInfo.getText().toString();
+        }
+
         textInfo = (TextView) findViewById(R.id.user_location);
         RDObject.pickupLocation = textInfo.getText().toString();
 
         textInfo = (TextView) findViewById(R.id.receiver_location);
         RDObject.shippingLocation = textInfo.getText().toString();
-
-        RequestDelivery.DeliveryItem test1 = RDObject.new DeliveryItem();
-        test1.categoryId = "000";
-        test1.count = 3;
-        test1.description = "LG G5";
-        test1.dimension = "000";
-
-        RequestDelivery.DeliveryItem test2 = RDObject.new DeliveryItem();
-        test2.categoryId = "005";
-        test2.count = 1;
-        test2.description = "LG TV";
-        test2.dimension = "004";
-
-        RDObject.itemList.add(test1);
-        RDObject.itemList.add(test2);
 
         RDObject.getJSONData(tjson);
         Log.d(TAG, "Reservation = " + tjson.toString());
@@ -618,7 +616,15 @@ public class ReservationActivity extends Activity {
             Log.d(TAG, "deliveryID = " + deliveryid);
 
         } catch (JSONException e) {
+            status = false;
+            Toast.makeText(getApplicationContext(),
+                    "field 를 채워주세요", Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        }
+
+        if (status) {
+            Intent intent = new Intent(ReservationActivity.this, ReservationHistoryActivity.class);
+            startActivity(intent);
         }
     }
     // 예약취소 버튼 눌렀을 시,
@@ -626,5 +632,33 @@ public class ReservationActivity extends Activity {
         Intent intent = new Intent(ReservationActivity.this, MainMenuActivity.class);
         startActivity(intent);
     }
-}
 
+    //상품추가버튼 버튼 눌렀을 시,
+    public void addProductConfirm(View v) {
+        Intent intent = new Intent(ReservationActivity.this, AddProductActivity.class);
+//        intent.putExtra("RDObject", RDObject);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                list = (ListView) findViewById(R.id.list);
+                DeliveryItem item = data.getParcelableExtra("deliveryItem");
+
+
+                //RequestDelivery RDObject= (RequestDelivery) data.getParcelableExtra("RDObject");
+                Log.d(TAG, "parce data = " + item.categoryId + "/" + item.categoryName);
+                RDObject.itemList.add(item);
+                String str = item.categoryId+"\n"+item.categoryName+"\n"+item.description+"\n"+item.dimensionName+"\n"+item.count;
+
+                productArrayAdapter.add(str);
+                list.setAdapter(productArrayAdapter);
+                }
+            }
+        }
+    }

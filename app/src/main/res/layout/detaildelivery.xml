@@ -198,28 +198,21 @@
             android:text="요청 중"
             android:background="@color/common_action_bar_splitter"/>
 
-        <Button
-            android:id="@+id/deliveryMenViewButton1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:onClick="deliveryMenView"
-            android:layout_marginLeft="20dp" />
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp">
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:id="@+id/statuslog2"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
             android:text="배달 중"
@@ -234,29 +227,22 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="10dp">
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:id="@+id/statuslog3"
             android:background="@color/common_action_bar_splitter"/>
         <TextView
             android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:textSize="13sp"
             android:layout_marginLeft="20dp"
             android:text="배송 완료"
             android:background="@color/common_action_bar_splitter"/>
-
-        <Button
-            android:id="@+id/deliveryMenViewButton3"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:onClick="deliveryMenView"
-            android:layout_marginLeft="20dp" />
 
     </LinearLayout>
 </LinearLayout>

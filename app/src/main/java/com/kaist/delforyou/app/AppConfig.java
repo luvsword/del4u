@@ -4,7 +4,7 @@ package com.kaist.delforyou.app;
  * Created by luvsword on 2016-07-27.
  */
 public class AppConfig {
-    public static String HOST ="http://"
+    public static String HOST ="http://";
     // Server user login url
     public static String URL_LOGIN = "/login.php";
     // Server user register url

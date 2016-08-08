@@ -25,7 +25,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,8 +44,8 @@ public class MainMenuActivityforDeliveryMen extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String[] deliveryIDs = deliveryJobs.keySet().toArray(new String[0]);
             String deliveryID = deliveryIDs[position];
-            Log.i("HOHO", "Before owneremail. position) " + position);
             String owneremail = deliveryJobs.get(deliveryID).get("owner");
+            Log.i("HOHO", "owneremail. ) " + owneremail);
             Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivityforDeliveryMen.class);
             intent.putExtra("deliveryid", Integer.parseInt(deliveryID));
             intent.putExtra("ownerEmail", owneremail);
@@ -76,6 +75,7 @@ public class MainMenuActivityforDeliveryMen extends Activity {
 
     //작업할당 버튼 눌렀을 시,
     public void assignJob(View v) {
+        Log.i("HOHO", "Where am i ?");
         Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, AssignActivity.class);
         startActivity(intent);
     }

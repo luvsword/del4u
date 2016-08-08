@@ -26,7 +26,7 @@
                 android:textSize="15sp"
                 android:layout_weight="5"/>
             <Button
-                android:id="@+id/refreshDeliveryJobButton"
+                android:id="@+id/refreshUnassignedItemButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:text="배송조회"
                 android:textSize="15sp"
-                android:onClick="deliveryView"
+                android:onClick="dliveryView"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/reservationButton"
@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:text="작업할당"
                 android:textSize="15sp"
-                android:onClick="assignJob"
+                android:onClick="assignJobToMe"
                 android:layout_weight="1"/>
             <Button
                 android:id="@+id/reservationHistoryButton"
@@ -94,7 +94,7 @@
         android:fillViewport="true"
         android:background="@android:color/transparent">
         <ListView
-            android:id="@+id/deliveryJobList"
+            android:id="@+id/unassignedItemList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:listSelector="@android:color/transparent"

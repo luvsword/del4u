@@ -17,7 +17,6 @@ import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.kaist.delforyou.MainActivity;
 import com.kaist.delforyou.R;
 import com.kaist.delforyou.app.AppConfig;
 import com.kaist.delforyou.app.AppController;
@@ -77,7 +76,6 @@ public class LoginActivity extends Activity {
         }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view) {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
@@ -113,10 +111,8 @@ public class LoginActivity extends Activity {
     private void checkLogin(final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-
         pDialog.setMessage("Logging in ...");
         showDialog();
-
         StringRequest strReq = new StringRequest(Method.POST,
                 AppConfig.URL_LOGIN, new Response.Listener<String>() {
 
@@ -194,7 +190,6 @@ public class LoginActivity extends Activity {
             }
 
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }

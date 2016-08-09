@@ -45,7 +45,6 @@ public class MainMenuActivityforDeliveryMen extends Activity {
             String[] deliveryIDs = deliveryJobs.keySet().toArray(new String[0]);
             String deliveryID = deliveryIDs[position];
             String owneremail = deliveryJobs.get(deliveryID).get("owner");
-            Log.i("HOHO", "owneremail. ) " + owneremail);
             Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, DetailDeliveryActivityforDeliveryMen.class);
             intent.putExtra("deliveryid", Integer.parseInt(deliveryID));
             intent.putExtra("ownerEmail", owneremail);
@@ -63,14 +62,17 @@ public class MainMenuActivityforDeliveryMen extends Activity {
 
         db = new SQLiteHandler(getApplicationContext());
         email = db.getUserDetails().get("email");
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         taskPHP = new PHP_GetDeliveryJobs();
         taskPHP.execute(AppConfig.URL_GETDELIVERYJOBS);
     }
 
-    //배송조회 버튼 눌렀을 시,
-    public void deliveryView(View v) {
-
+    public void refreshList(View v) {
+        this.onResume();
     }
 
     //작업할당 버튼 눌렀을 시,
@@ -78,11 +80,7 @@ public class MainMenuActivityforDeliveryMen extends Activity {
         Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, AssignActivity.class);
         startActivity(intent);
     }
-    //예약함 버튼 눌렀을 시,
-    public void reservationHistory(View v) {
-        Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, ReservationHistoryActivity.class);
-        startActivity(intent);
-    }
+
     //설정 버튼 눌렀을 시,
     public void setting(View v) {
         Intent intent = new Intent(MainMenuActivityforDeliveryMen.this, SettingActivity.class);
@@ -137,7 +135,6 @@ public class MainMenuActivityforDeliveryMen extends Activity {
 
                 if (conn!=null){
                     conn.setConnectTimeout(10000);
-                    Log.i("HOHO", "Response Code) "+ conn.getResponseCode());
                     //conn.setUseCaches(false);
                     if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
